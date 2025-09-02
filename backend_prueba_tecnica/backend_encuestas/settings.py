@@ -50,6 +50,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware'
 ]
 
 ROOT_URLCONF = 'backend_encuestas.urls'
@@ -77,6 +78,14 @@ WSGI_APPLICATION = 'backend_encuestas.wsgi.application'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
+    
+    
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.postgresql',
+    #     'NAME': 'encuestas',
+    #     'USER': 'postgres',
+    #     'PASSWORD': '123'
+    # }
     "default": {
         'ENGINE': config("DB_ENGINE", default="django.db.backends.postgresql"),
         'NAME': config("DB_DATABASE", default=""),
