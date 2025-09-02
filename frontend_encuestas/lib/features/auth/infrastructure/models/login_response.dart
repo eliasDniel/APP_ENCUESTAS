@@ -3,7 +3,7 @@
 
 
 class LoginResponse {
-    final String id;
+    final int id;
     final String email;
     final String fullName;
     final bool isActive;

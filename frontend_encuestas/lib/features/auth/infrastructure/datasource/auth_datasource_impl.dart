@@ -14,7 +14,8 @@ class AuthDatasourceImpl extends AuthDatasource {
         data: {'email': email, 'password': password},
       );
       final loginResponse = LoginResponse.fromJson(response.data);
-      return UserMapper.userJsonToEntity(loginResponse);
+      final user = UserMapper.userJsonToEntity(loginResponse);
+      return user;
     } on DioError catch (e) {
       if (e.type == DioErrorType.connectionTimeout) {
         throw CustomError('Revisar conexión');

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../shared/shared.dart';
+import '../providers/providers.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -62,9 +63,14 @@ class _LoginForm extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // final loginFormState = ref.watch(loginFormProvider);
+    final loginFormState = ref.watch(loginFormProvider);
 
     final textStyles = Theme.of(context).textTheme;
+    ref.listen(authProvider, (previous, next) {
+      if (next.errorMessage.isEmpty) return;
+      showSnackbar(context, next.errorMessage);
+    });
+
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 50),
@@ -77,11 +83,21 @@ class _LoginForm extends ConsumerWidget {
           CustomTextFormField(
             label: 'Correo',
             keyboardType: TextInputType.emailAddress,
-            onChanged: (p0) {},
+            onChanged: ref.read(loginFormProvider.notifier).onEmailChanged,
+            errorMessage: loginFormState.isFormPosted
+                ? loginFormState.email.errorMessage
+                : null,
           ),
           const SizedBox(height: 30),
 
-          CustomTextFormField(label: 'Contraseña', obscureText: true),
+          CustomTextFormField(
+            label: 'Contraseña',
+            obscureText: true,
+            onChanged: ref.read(loginFormProvider.notifier).onPasswordChanged,
+            errorMessage: loginFormState.isFormPosted
+                ? loginFormState.password.errorMessage
+                : null,
+          ),
 
           const SizedBox(height: 30),
 
@@ -91,7 +107,9 @@ class _LoginForm extends ConsumerWidget {
             child: CustomFilledButton(
               text: 'Ingresar',
               buttonColor: Colors.black,
-              onPressed: () {},
+              onPressed: () {
+                ref.read(loginFormProvider.notifier).onSubmit();
+              },
             ),
           ),
 

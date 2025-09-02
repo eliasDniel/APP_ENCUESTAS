@@ -3,7 +3,7 @@ import '../../features/auth/presentation/screens/screens.dart';
 import '../../features/encuestas/presentation/encuestas.dart';
 
 final appRouter = GoRouter(
-  initialLocation: '/',
+  initialLocation: '/login',
   routes: [
     ///* Auth Routes
     GoRoute(path: '/login', builder: (context, state) => const LoginScreen()),
