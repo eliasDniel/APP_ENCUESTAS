@@ -1,6 +1,6 @@
-import 'package:app_encuentas_prueba_tecnica/features/encuestas/presentation/encuestas.dart';
 import 'package:go_router/go_router.dart';
 import '../../features/auth/presentation/screens/screens.dart';
+import '../../features/encuestas/presentation/encuestas.dart';
 
 final appRouter = GoRouter(
   initialLocation: '/',
@@ -12,11 +12,8 @@ final appRouter = GoRouter(
       builder: (context, state) => const RegisterScreen(),
     ),
 
-    ///* Product Routes
-    GoRoute(
-      path: '/',
-      builder: (context, state) => const EncuestaScreen(),
-    ),
+    ///* Encuestas Routes
+    GoRoute(path: '/', builder: (context, state) => const EncuestaScreen()),
   ],
 
   ///! TODO: Bloquear si no se está autenticado de alguna manera
