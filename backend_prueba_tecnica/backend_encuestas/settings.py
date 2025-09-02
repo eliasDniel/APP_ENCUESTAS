@@ -9,7 +9,8 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
-
+# Configuración de duración de tokens para SimpleJWT
+from datetime import timedelta
 from decouple import config
 import os
 from pathlib import Path
@@ -38,9 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'rest_framework_simplejwt',
     'corsheaders',
     'users'
-    # 'corsheaders'
 ]
 
 MIDDLEWARE = [
@@ -80,14 +81,6 @@ WSGI_APPLICATION = 'backend_encuestas.wsgi.application'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
-    
-    
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.postgresql',
-    #     'NAME': 'encuestas',
-    #     'USER': 'postgres',
-    #     'PASSWORD': '123'
-    # }
     "default": {
         'ENGINE': config("DB_ENGINE", default="django.db.backends.postgresql"),
         'NAME': config("DB_DATABASE", default=""),
@@ -116,6 +109,23 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=1),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+}
+# Configuración de DRF y SimpleJWT
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+    'EXCEPTION_HANDLER': 'users.custom_exception.custom_exception_handler',
+}
 
 
 # Internationalization
