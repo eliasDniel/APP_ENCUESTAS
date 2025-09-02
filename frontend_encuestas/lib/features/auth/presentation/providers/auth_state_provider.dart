@@ -2,19 +2,23 @@
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../shared/shared.dart';
 import '../../domain/domain.dart';
 import '../../infrastructure/infrastructure.dart';
 
 
 final authProvider = StateNotifierProvider<AuthNotifier, AuthState>((ref) {
   final authRepository = AuthRepositoryImpl();
-  return AuthNotifier(authRepository: authRepository);
+  final keyValueStorageService = KeyValueStorageImpl();
+  return AuthNotifier(authRepository: authRepository,
+    keyValueStorageService: keyValueStorageService);
 });
 
 class AuthNotifier extends StateNotifier<AuthState> {
   final AuthRepository authRepository;
+    final KeyValueStorageService keyValueStorageService;
 
-  AuthNotifier({required this.authRepository}) : super(AuthState());
+  AuthNotifier({required this.authRepository, required this.keyValueStorageService}) : super(AuthState());
 
   void loginUser(String email, String password) async {
     await Future.delayed(const Duration(milliseconds: 500));
@@ -41,16 +45,17 @@ class AuthNotifier extends StateNotifier<AuthState> {
   }
   void checkAuthStatus() async {}
 
-  void _setLoggedUser(User user) {
+  void _setLoggedUser(User user) async{
+    await keyValueStorageService.setKeyValue('token', user.token);
     state = state.copyWith(
       authStatus: AuthStatus.authenticated,
       user: user,
-      // errorMessage: '',
+      errorMessage: '',
     );
   }
 
   Future<void> logoutUser([String? errorMessage]) async {
-    // Limpiar token
+    await keyValueStorageService.removeKey('token');
     state = state.copyWith(
       authStatus: AuthStatus.unauthenticated,
       user: null,
