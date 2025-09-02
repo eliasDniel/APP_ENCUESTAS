@@ -1,0 +1,5 @@
+djangorestframework-simplejwt
+djangorestframework
+dj-database-url==2.3.0
+Django==5.1.6
+psycopg2-binary==2.9.10
