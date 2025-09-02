@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../shared/shared.dart';
 
-class LoginScreen extends StatelessWidget {
-  const LoginScreen({super.key});
+class RegisterScreen extends StatelessWidget {
+  const RegisterScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final scaffoldBackgroundColor = Theme.of(context).scaffoldBackgroundColor;
+    final textStyles = Theme.of(context).textTheme;
 
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
@@ -22,12 +22,32 @@ class LoginScreen extends StatelessWidget {
               children: [
                 const SizedBox(height: 80),
                 // Icon Banner
-                const Icon(
-                  Icons.production_quantity_limits_rounded,
-                  color: Colors.white,
-                  size: 100,
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    IconButton(
+                      onPressed: () {
+                        if (!context.canPop()) return;
+                        context.pop();
+                      },
+                      icon: const Icon(
+                        Icons.arrow_back_rounded,
+                        size: 40,
+                        color: Colors.white,
+                      ),
+                    ),
+                    const Spacer(flex: 1),
+                    Text(
+                      'Crear cuenta',
+                      style: textStyles.titleLarge?.copyWith(
+                        color: Colors.white,
+                      ),
+                    ),
+                    const Spacer(flex: 2),
+                  ],
                 ),
-                const SizedBox(height: 80),
+
+                const SizedBox(height: 50),
 
                 Container(
                   height:
@@ -39,7 +59,7 @@ class LoginScreen extends StatelessWidget {
                       topLeft: Radius.circular(100),
                     ),
                   ),
-                  child: const _LoginForm(),
+                  child: const _RegisterForm(),
                 ),
               ],
             ),
@@ -50,20 +70,11 @@ class LoginScreen extends StatelessWidget {
   }
 }
 
-class _LoginForm extends ConsumerWidget {
-  const _LoginForm();
-
-  void showSnackbar(BuildContext context, String message) {
-    ScaffoldMessenger.of(context).hideCurrentSnackBar();
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(SnackBar(content: Text(message)));
-  }
+class _RegisterForm extends StatelessWidget {
+  const _RegisterForm();
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    // final loginFormState = ref.watch(loginFormProvider);
-
+  Widget build(BuildContext context) {
     final textStyles = Theme.of(context).textTheme;
 
     return Padding(
@@ -71,17 +82,29 @@ class _LoginForm extends ConsumerWidget {
       child: Column(
         children: [
           const SizedBox(height: 50),
-          Text('Login', style: textStyles.titleLarge),
-          const SizedBox(height: 90),
+          Text('Nueva cuenta', style: textStyles.titleMedium),
+          const SizedBox(height: 50),
 
-          CustomTextFormField(
-            label: 'Correo',
+          const CustomTextFormField(
+            label: 'Nombre completo',
             keyboardType: TextInputType.emailAddress,
-            onChanged: (p0) {},
           ),
           const SizedBox(height: 30),
 
-          CustomTextFormField(label: 'Contraseña', obscureText: true),
+          const CustomTextFormField(
+            label: 'Correo',
+            keyboardType: TextInputType.emailAddress,
+          ),
+          const SizedBox(height: 30),
+
+          const CustomTextFormField(label: 'Contraseña', obscureText: true),
+
+          const SizedBox(height: 30),
+
+          const CustomTextFormField(
+            label: 'Repita la contraseña',
+            obscureText: true,
+          ),
 
           const SizedBox(height: 30),
 
@@ -89,7 +112,7 @@ class _LoginForm extends ConsumerWidget {
             width: double.infinity,
             height: 60,
             child: CustomFilledButton(
-              text: 'Ingresar',
+              text: 'Crear',
               buttonColor: Colors.black,
               onPressed: () {},
             ),
@@ -100,10 +123,15 @@ class _LoginForm extends ConsumerWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text('¿No tienes cuenta?'),
+              const Text('¿Ya tienes cuenta?'),
               TextButton(
-                onPressed: () => context.push('/register'),
-                child: const Text('Crea una aquí'),
+                onPressed: () {
+                  if (context.canPop()) {
+                    return context.pop();
+                  }
+                  context.go('/login');
+                },
+                child: const Text('Ingresa aquí'),
               ),
             ],
           ),
