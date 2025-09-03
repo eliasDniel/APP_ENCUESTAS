@@ -16,9 +16,14 @@ class EncuestasView(APIView):
         page = int(request.query_params.get('page', 1))
         limit = 10
         offset = (page - 1) * limit
-        encuestas = Encuesta.objects.all()[offset:offset+limit]
-        total = Encuesta.objects.count()
-        serializer = EncuestaListSerializer(encuestas, many=True, context={'user': request.user})
+        user = request.user
+        if user.is_staff:
+            queryset = Encuesta.objects.filter(creada_por=user)
+        else:
+            queryset = Encuesta.objects.all()
+        total = queryset.count()
+        encuestas = queryset[offset:offset+limit]
+        serializer = EncuestaListSerializer(encuestas, many=True, context={'user': user})
         return Response({
             'results': serializer.data,
             'total': total,
