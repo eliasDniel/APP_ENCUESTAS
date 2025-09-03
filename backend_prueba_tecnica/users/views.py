@@ -8,8 +8,14 @@ from .serializers import UserSerializer
 class UserView(APIView):
     permission_classes = [IsAuthenticated]
     def get(self, request):
-        serializer = LoginUserSerializer(request.user)
-        return Response(serializer.data)
+        print('UserView GET called')
+        print('User:', request.user)
+        print('User is authenticated:', request.user.is_authenticated)
+        refresh = RefreshToken.for_user(request.user)
+        user_data = LoginUserSerializer(request.user).data
+        user_data['token'] = str(refresh.access_token)
+        print('Response data:', user_data)
+        return Response(user_data)
 
 class RegisterView(APIView):
     permission_classes = [AllowAny]
