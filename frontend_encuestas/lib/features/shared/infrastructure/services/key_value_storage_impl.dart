@@ -15,6 +15,10 @@ class KeyValueStorageImpl implements KeyValueStorageService {
         prefs.setInt(key, value as int);
         break;
 
+      case bool:
+        prefs.setBool(key, value as bool);
+        break;
+
       case String:
         prefs.setString(key, value as String);
         break;
@@ -33,6 +37,8 @@ class KeyValueStorageImpl implements KeyValueStorageService {
     switch (T) {
       case int:
         return prefs.getInt(key) as T?;
+      case bool:
+        return prefs.getBool(key) as T?;
       case String:
         return prefs.getString(key) as T?;
       default:

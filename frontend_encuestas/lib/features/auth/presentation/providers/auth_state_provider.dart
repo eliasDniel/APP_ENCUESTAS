@@ -47,25 +47,20 @@ class AuthNotifier extends StateNotifier<AuthState> {
     }
   }
 
-void checkAuthStatus() async {
-  final token = await keyValueStorageService.getValue<String>('token');
-  print('Token en storage: $token');
-  if (token == null) {
-    print('No hay token, se hace logout');
-    return logoutUser();
+  void checkAuthStatus() async {
+    final token = await keyValueStorageService.getValue<String>('token');
+    if (token == null) {
+      return logoutUser();
+    }
+    try {
+      final user = await authRepository.checkStatus(token);
+      _setLoggedUser(user);
+    } catch (e) {
+      logoutUser();
+    }
   }
-  try {
-    final user = await authRepository.checkStatus(token);
-    print('Usuario recibido: ${user.email}, token: ${user.token}');
-    _setLoggedUser(user);
-  } catch (e) {
-    print('Error en checkStatus: $e');
-    logoutUser();
-  }
-}
 
   void _setLoggedUser(User user) async {
-    print('Token recibido: ${user.token}');
     await keyValueStorageService.setKeyValue("token", user.token);
     state = state.copyWith(
       authStatus: AuthStatus.authenticated,

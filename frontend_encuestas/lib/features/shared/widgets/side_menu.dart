@@ -15,11 +15,15 @@ class SideMenu extends ConsumerStatefulWidget {
 
 class SideMenuState extends ConsumerState<SideMenu> {
   int navDrawerIndex = 0;
+  // final keyValueStorageService = KeyValueStorageImpl();
 
   @override
   Widget build(BuildContext context) {
     final hasNotch = MediaQuery.of(context).viewPadding.top > 35;
     final textStyles = Theme.of(context).textTheme;
+    final authState = ref.watch(authProvider);
+    final userName = authState.user?.fullname ?? 'Invitado';
+    final isAdmin = authState.user?.isAdmin ?? false;
 
     return NavigationDrawer(
       elevation: 1,
@@ -36,12 +40,12 @@ class SideMenuState extends ConsumerState<SideMenu> {
       children: [
         Padding(
           padding: EdgeInsets.fromLTRB(20, hasNotch ? 0 : 20, 16, 0),
-          child: Text('Saludos', style: textStyles.titleMedium),
+          child: Text(!isAdmin ? 'Administrador' : 'Cliente', style: textStyles.titleMedium),
         ),
 
         Padding(
           padding: const EdgeInsets.fromLTRB(20, 0, 16, 10),
-          child: Text('Elias Ramos', style: textStyles.titleSmall),
+          child: Text(userName, style: textStyles.titleSmall),
         ),
 
         const NavigationDrawerDestination(
