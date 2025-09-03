@@ -1,3 +1,3 @@
 
 
-export 'presentation/encuestas.dart';
+export 'presentation/screens/encuestas.dart';

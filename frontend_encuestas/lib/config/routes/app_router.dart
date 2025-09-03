@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../features/auth/presentation/providers/providers.dart';
 import '../../features/auth/presentation/screens/screens.dart';
-import '../../features/encuestas/presentation/encuestas.dart';
+import '../../features/encuestas/presentation/screens/encuestas.dart';
 import 'app_router_notifier.dart';
 
 final appRouterProvider = Provider((ref) {
