@@ -1,8 +1,10 @@
 import 'package:app_encuentas_prueba_tecnica/features/auth/presentation/screens/check_auth_status_screen.dart';
+import 'package:app_encuentas_prueba_tecnica/features/encuestas/presentation/screens/encuesta_screen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../features/auth/presentation/providers/providers.dart';
 import '../../features/auth/presentation/screens/screens.dart';
+import '../../features/encuestas/presentation/screens/create_encuesta.dart';
 import '../../features/encuestas/presentation/screens/encuestas.dart';
 import 'app_router_notifier.dart';
 
@@ -26,7 +28,26 @@ final appRouterProvider = Provider((ref) {
       ),
 
       ///* Encuestas Routes
-      GoRoute(path: '/', builder: (context, state) => const EncuestaScreen()),
+      GoRoute(
+        path: '/',
+        builder: (context, state) => const EncuestaScreen(),
+
+        routes: [
+          GoRoute(
+            path: 'encuesta/:id',
+            name: DetalleEncuestaScreen.routeName,
+            builder: (context, state) {
+              final encuestaId = state.params['id']!;
+              return DetalleEncuestaScreen(encuestaId: encuestaId);
+            },
+          ),
+          GoRoute(
+            path: 'create-encuesta',
+            builder: (context, state) => const CreateEncuestaScreen(),
+            name: CreateEncuestaScreen.routeName,
+          ),
+        ],
+      ),
     ],
 
     redirect: (context, state) {

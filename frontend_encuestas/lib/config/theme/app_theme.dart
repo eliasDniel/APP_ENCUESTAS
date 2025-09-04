@@ -22,7 +22,31 @@ class AppTheme {
       titleMedium: GoogleFonts.montserratAlternates()
         .copyWith( fontSize: 30, fontWeight: FontWeight.bold ),
       titleSmall: GoogleFonts.montserratAlternates()
-        .copyWith( fontSize: 20 )
+        .copyWith( fontSize: 20 ),
+      
+
+      bodyLarge: GoogleFonts.montserratAlternates()
+        .copyWith( ),
+      bodyMedium: GoogleFonts.montserratAlternates()
+        .copyWith(  ),
+      bodySmall: GoogleFonts.montserratAlternates()
+        .copyWith( ),
+
+      displayLarge: GoogleFonts.montserratAlternates()
+        .copyWith( fontWeight: FontWeight.bold ),
+      displayMedium: GoogleFonts.montserratAlternates()
+        .copyWith( fontWeight: FontWeight.bold ),
+      displaySmall: GoogleFonts.montserratAlternates()
+        .copyWith( fontWeight: FontWeight.bold ),
+
+
+labelLarge: GoogleFonts.montserratAlternates()
+        .copyWith(  fontWeight: FontWeight.bold ),
+      labelMedium: GoogleFonts.montserratAlternates()
+        .copyWith(  fontWeight: FontWeight.bold ),
+      labelSmall: GoogleFonts.montserratAlternates()
+        .copyWith(  fontWeight: FontWeight.bold ),
+      
     ),
 
     ///* Scaffold Background Color

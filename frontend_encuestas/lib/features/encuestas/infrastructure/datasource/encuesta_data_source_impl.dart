@@ -4,6 +4,7 @@ import '../../../../config/config.dart';
 import '../../../auth/infrastructure/infrastructure.dart';
 import '../../domain/domain.dart';
 import '../mappers/encuestas_mapper.dart';
+import '../models/encuesta_detalle_response.dart';
 
 class EncuestasDataSourceImpl implements EncuestasDatasource {
   late final Dio dio;
@@ -36,7 +37,53 @@ class EncuestasDataSourceImpl implements EncuestasDatasource {
   }
 
   @override
-  Future<DetalleEncuesta> getEncuestaById(int id) {
-    throw UnimplementedError();
+  Future<DetalleEncuesta> getEncuestaById(int id) async {
+    try {
+      final response = await dio.get('/encuestas/encuestas/$id');
+      final encuestaResponse = EncuestaDetalleResponse.fromJson(response.data);
+      final encuesta = EncuestasMapper.fromJsonToEntityDetails(encuestaResponse);
+      return encuesta;
+    } on DioError catch (e) {
+      if (e.response?.statusCode == 401) {
+        throw CustomError(e.response?.data['message'] ?? 'Token inválido');
+      }
+      throw Exception();
+    } catch (e) {
+      throw Exception();
+    }
+  }
+  
+  @override
+  Future<Encuesta> submitEncuesta(Map<String, dynamic> body) async {
+    try {
+      
+      final response = await dio.post('/encuestas/encuestas/', data: body);
+      final encuestaResponse = EncuestaResult.fromJson(response.data);
+      return EncuestasMapper.fromJsonToEntity(encuestaResponse);
+    } on DioError catch (e) {
+      if (e.response?.statusCode == 401) {
+        throw CustomError(e.response?.data['detail'] ?? 'Token inválido');
+      }
+      throw Exception();
+    } catch (e) {
+      throw Exception();
+    }
+  }
+  
+  @override
+  Future<Encuesta> responderEncuesta(Map<String, dynamic> body) async {
+    try {
+      final response = await dio.post('/encuestas/encuestas/responder/', data: body);
+      final encuestaResponse = EncuestaResult.fromJson(response.data);
+      final encuesta = EncuestasMapper.fromJsonToEntity(encuestaResponse);
+      return encuesta;
+    } on DioError catch (e) {
+      if (e.response?.statusCode == 401) {
+        throw CustomError(e.response?.data['detail'] ?? 'Error al Responder');
+      }
+      throw Exception();
+    } catch (e) {
+      throw Exception();
+    }
   }
 }

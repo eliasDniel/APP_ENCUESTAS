@@ -17,9 +17,8 @@ class Encuesta(models.Model):
 
 class Pregunta(models.Model):
     TIPO_RESPUESTA = [
-        ("texto", "Texto abierto"),
-        ("opcion_unica", "Opción única"),
-        ("multiple", "Opción múltiple"),
+        ("opcion_libre", "Opción Libre"),
+        ("opcion_multiple", "Opción múltiple"),
     ]
 
     encuesta = models.ForeignKey(
@@ -72,8 +71,9 @@ class Respuesta(models.Model):
     respuesta_texto = models.TextField(blank=True, null=True)
     fecha_respuesta = models.DateTimeField(auto_now_add=True)
 
+
     class Meta:
-        unique_together = ("usuario", "encuesta")  # 👈 asegura que solo una vez por encuesta
+        pass  # Ya no se restringe a una sola respuesta por usuario y encuesta
 
     def __str__(self):
         return f"{self.usuario} - {self.encuesta}"

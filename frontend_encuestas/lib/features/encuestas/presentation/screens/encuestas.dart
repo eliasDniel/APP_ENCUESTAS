@@ -1,6 +1,7 @@
 import 'package:app_encuentas_prueba_tecnica/features/shared/widgets/custom_card_encuesta.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import '../../../auth/presentation/providers/providers.dart';
 import '../../../shared/shared.dart';
 import '../providers/encuesta_provider_state.dart';
@@ -31,7 +32,9 @@ class EncuestaScreenState extends ConsumerState<EncuestaScreen> {
           ? FloatingActionButton.extended(
               label: const Text('Nueva encuesta'),
               icon: const Icon(Icons.add),
-              onPressed: () {},
+              onPressed: () {
+                context.push('/create-encuesta');
+              },
             )
           : null,
     );
@@ -69,10 +72,7 @@ class _EncuestasViewState extends ConsumerState<_EncuestasView> {
       itemBuilder: (context, index) {
         final encuesta = encuestas[index];
         return CustomCardEncuesta(
-          titulo: encuesta.titulo,
-          descripcion: encuesta.descripcion,
-          fechaCreacion: encuesta.fechaCreacion,
-          index: index + 1,
+          encuesta: encuesta,
         );
       },
     );

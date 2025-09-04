@@ -1,4 +1,3 @@
-
 import '../../domain/domain.dart';
 
 class EncuestaRepositoryImpl implements EncuestasRepository {
@@ -14,5 +13,15 @@ class EncuestaRepositoryImpl implements EncuestasRepository {
   @override
   Future<DetalleEncuesta> getEncuestaById(int id) {
     return datasource.getEncuestaById(id);
+  }
+
+  @override
+  Future<Encuesta> responderEncuesta(Map<String, dynamic> body) {
+    return datasource.responderEncuesta(body);
+  }
+
+  @override
+  Future<Encuesta> submitEncuesta(Map<String, dynamic> body) {
+    return datasource.submitEncuesta(body);
   }
 }

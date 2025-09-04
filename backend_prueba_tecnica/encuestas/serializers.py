@@ -29,21 +29,23 @@ class EncuestaListSerializer(serializers.ModelSerializer):
 class OpcionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Opcion
-        fields = ['texto']
+        fields = ['id', 'texto']
 
 class PreguntaSerializer(serializers.ModelSerializer):
     opciones = OpcionSerializer(many=True)
 
     class Meta:
         model = Pregunta
-        fields = ['texto', 'tipo', 'opciones']
+        fields = ['id', 'texto', 'tipo', 'opciones']
+
 
 class EncuestaSerializer(serializers.ModelSerializer):
     preguntas = PreguntaSerializer(many=True)
+    estado = serializers.SerializerMethodField()
 
     class Meta:
         model = Encuesta
-        fields = ['id', 'titulo', 'descripcion', 'preguntas']
+        fields = ['id', 'titulo', 'descripcion', 'preguntas','estado']
 
     def create(self, validated_data):
         preguntas_data = validated_data.pop('preguntas')
@@ -54,3 +56,44 @@ class EncuestaSerializer(serializers.ModelSerializer):
             for opcion_data in opciones_data:
                 Opcion.objects.create(pregunta=pregunta, **opcion_data)
         return encuesta
+    
+    def get_estado(self, obj):
+        user = self.context.get('user')
+        if not user or user.is_anonymous:
+            return 'Pendiente'
+        if Respuesta.objects.filter(usuario=user, encuesta=obj).exists():
+            return 'Completada'
+        return 'Pendiente'
+
+
+
+# Serializer para recibir respuestas de encuestas
+class RespuestaClienteSerializer(serializers.Serializer):
+    encuesta_id = serializers.IntegerField()
+    respuestas = serializers.ListField(
+        child=serializers.DictField(
+            child=serializers.CharField()
+        )
+    )
+
+    def validate(self, data):
+        from .models import Encuesta, Pregunta, Opcion, Respuesta
+        user = self.context['request'].user
+        encuesta_id = data['encuesta_id']
+        respuestas = data['respuestas']
+        # Validar que la encuesta existe
+        try:
+            encuesta = Encuesta.objects.get(id=encuesta_id)
+        except Encuesta.DoesNotExist:
+            raise serializers.ValidationError('La encuesta no existe.')
+        # Validar que el usuario no haya respondido ya
+        if Respuesta.objects.filter(usuario=user, encuesta=encuesta).exists():
+            raise serializers.ValidationError('Ya has respondido esta encuesta.')
+        # Validar preguntas
+        pregunta_ids = set(p.id for p in encuesta.preguntas.all())
+        for r in respuestas:
+            if 'pregunta_id' not in r:
+                raise serializers.ValidationError('Falta pregunta_id en una respuesta.')
+            if int(r['pregunta_id']) not in pregunta_ids:
+                raise serializers.ValidationError(f"Pregunta {r['pregunta_id']} no pertenece a la encuesta.")
+        return data
