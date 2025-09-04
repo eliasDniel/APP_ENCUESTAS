@@ -68,6 +68,6 @@ class EncuestasNotifier extends StateNotifier<List<Encuesta>> {
 
   Future<void> createEncuestaMethod(Map<String, dynamic> data) async {
     final encuesta = await crearEncuesta(data);
-    state = [...state, encuesta];
+    state = [encuesta,...state];
   }
 }
