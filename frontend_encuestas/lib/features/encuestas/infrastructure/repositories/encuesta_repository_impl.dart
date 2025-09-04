@@ -1,3 +1,5 @@
+import 'package:app_encuentas_prueba_tecnica/features/encuestas/domain/entities/encuestas_result.dart';
+
 import '../../domain/domain.dart';
 
 class EncuestaRepositoryImpl implements EncuestasRepository {
@@ -23,5 +25,10 @@ class EncuestaRepositoryImpl implements EncuestasRepository {
   @override
   Future<Encuesta> submitEncuesta(Map<String, dynamic> body) {
     return datasource.submitEncuesta(body);
+  }
+
+  @override
+  Future<EncuestasResultDetail> getResultadosEncuestaById(int id) {
+    return datasource.getResultadosEncuestaById(id);
   }
 }

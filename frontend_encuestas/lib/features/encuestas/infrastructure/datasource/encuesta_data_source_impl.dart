@@ -1,3 +1,4 @@
+import 'package:app_encuentas_prueba_tecnica/features/encuestas/domain/entities/encuestas_result.dart';
 import 'package:app_encuentas_prueba_tecnica/features/encuestas/infrastructure/models/encuestas_response.dart';
 import 'package:dio/dio.dart';
 import '../../../../config/config.dart';
@@ -5,6 +6,7 @@ import '../../../auth/infrastructure/infrastructure.dart';
 import '../../domain/domain.dart';
 import '../mappers/encuestas_mapper.dart';
 import '../models/encuesta_detalle_response.dart';
+import '../models/encuestas_result_response.dart';
 
 class EncuestasDataSourceImpl implements EncuestasDatasource {
   late final Dio dio;
@@ -80,6 +82,23 @@ class EncuestasDataSourceImpl implements EncuestasDatasource {
     } on DioError catch (e) {
       if (e.response?.statusCode == 401) {
         throw CustomError(e.response?.data['detail'] ?? 'Error al Responder');
+      }
+      throw Exception();
+    } catch (e) {
+      throw Exception();
+    }
+  }
+
+  @override
+  Future<EncuestasResultDetail> getResultadosEncuestaById(int id) async {
+    try {
+      final response = await dio.get('/encuestas/encuestas/$id/resultados/');
+      final resultResponse = ResultadosEncuestasResponse.fromJson(response.data);
+      final resultados = EncuestasMapper.fromJsonToEntityResultados(resultResponse);
+      return resultados;
+    } on DioError catch (e) {
+      if (e.response?.statusCode == 401) {
+        throw CustomError(e.response?.data['detail'] ?? 'Token inválido');
       }
       throw Exception();
     } catch (e) {
