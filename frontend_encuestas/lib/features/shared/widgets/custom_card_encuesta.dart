@@ -15,7 +15,11 @@ class CustomCardEncuesta extends ConsumerWidget {
     final authUser = ref.watch(authProvider);
     return GestureDetector(
       onTap: () {
-        context.push('/encuesta/${encuesta.id}');
+        if(!authUser.user!.isAdmin) {
+          context.push('/encuesta/${encuesta.id}');
+        } else {
+          context.push('/resultados-encuesta/${encuesta.id}');
+        }
       },
       child: Card(
         elevation: 6,

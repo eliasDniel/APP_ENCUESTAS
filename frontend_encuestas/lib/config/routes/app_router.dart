@@ -1,5 +1,6 @@
 import 'package:app_encuentas_prueba_tecnica/features/auth/presentation/screens/check_auth_status_screen.dart';
 import 'package:app_encuentas_prueba_tecnica/features/encuestas/presentation/screens/encuesta_screen.dart';
+import 'package:app_encuentas_prueba_tecnica/features/encuestas/presentation/screens/resultados_encuesta_screen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../features/auth/presentation/providers/providers.dart';
@@ -45,6 +46,14 @@ final appRouterProvider = Provider((ref) {
             path: 'create-encuesta',
             builder: (context, state) => const CreateEncuestaScreen(),
             name: CreateEncuestaScreen.routeName,
+          ),
+          GoRoute(
+            path: 'resultados-encuesta/:id',
+            builder: (context, state){
+              final encuestaId = state.params['id'] ?? '0';
+              return ResultadosEncuestaScreen(encuestaId: encuestaId);
+            },
+            name: ResultadosEncuestaScreen.routeName,
           ),
         ],
       ),
