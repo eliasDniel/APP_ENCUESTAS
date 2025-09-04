@@ -7,11 +7,10 @@ from .serializers import EncuestaSerializer, EncuestaListSerializer, RespuestaCl
 from .models import Pregunta, Opcion, Respuesta
 from rest_framework import status
 from rest_framework.generics import get_object_or_404
+from rest_framework.permissions import IsAdminUser
 
-# Endpoint para responder una encuesta
 class ResponderEncuestaView(APIView):
     permission_classes = [IsAuthenticated]
-
     def post(self, request):
         serializer = RespuestaClienteSerializer(data=request.data, context={'request': request})
         if serializer.is_valid():
@@ -19,7 +18,6 @@ class ResponderEncuestaView(APIView):
             encuesta_id = serializer.validated_data['encuesta_id']
             respuestas = serializer.validated_data['respuestas']
             encuesta = Encuesta.objects.get(id=encuesta_id)
-            # Guardar cada respuesta
             for r in respuestas:
                 pregunta = Pregunta.objects.get(id=r['pregunta_id'])
                 opcion = None
@@ -34,7 +32,6 @@ class ResponderEncuestaView(APIView):
                     opcion=opcion,
                     respuesta_texto=respuesta_texto
                 )
-            # Devolver la encuesta en formato de lista (como en el listado)
             serializer = EncuestaListSerializer([encuesta], many=True, context={'user': user})
             return Response(serializer.data[0], status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -76,4 +73,62 @@ class EncuestasView(APIView):
             serializer = EncuestaListSerializer([encuesta], many=True, context={'user': request.user})
             return Response(serializer.data[0], status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class EncuestaResultadosAdminView(APIView):
+    permission_classes = [IsAuthenticated, IsAdminUser]
+    def get(self, request, pk):
+        encuesta = get_object_or_404(Encuesta, pk=pk)
+        preguntas = encuesta.preguntas.all()
+        resultados = []
+
+        for pregunta in preguntas:
+            opciones = pregunta.opciones.all()
+            opciones_resultado = []
+            for opcion in opciones:
+                respuestas_opcion_qs = Respuesta.objects.filter(
+                    encuesta=encuesta,
+                    pregunta=pregunta,
+                    opcion=opcion
+                )
+                count = respuestas_opcion_qs.count()
+                usuarios = [
+                    {
+                        'usuario_id': r.usuario.id,
+                        'usuario': r.usuario.name
+                    }
+                    for r in respuestas_opcion_qs
+                ]
+                opciones_resultado.append({
+                    'opcion_id': opcion.id,
+                    'texto': opcion.texto,
+                    'count_respuestas_option': count,
+                    'usuarios': usuarios
+                })
+            respuestas_abiertas_qs = Respuesta.objects.filter(
+                encuesta=encuesta,
+                pregunta=pregunta,
+                opcion=None
+            ).exclude(respuesta_texto__isnull=True).exclude(respuesta_texto__exact='')
+            respuestas_abiertas = [
+                {
+                    'usuario_id': r.usuario.id,
+                    'usuario': r.usuario.name,
+                    'respuesta_texto': r.respuesta_texto
+                }
+                for r in respuestas_abiertas_qs
+            ]
+
+            resultados.append({
+                'pregunta_id': pregunta.id,
+                'texto': pregunta.texto,
+                'opciones': opciones_resultado,
+                'count_respuestas_abiertas': len(respuestas_abiertas),
+                'respuestas_abiertas': respuestas_abiertas
+            })
+
+        return Response({
+            'encuesta_id': encuesta.id,
+            'titulo': encuesta.titulo,
+            'resultados': resultados
+        }, status=status.HTTP_200_OK)
 

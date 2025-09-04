@@ -28,7 +28,7 @@ class EncuestaScreenState extends ConsumerState<EncuestaScreen> {
         ],
       ),
       body: const _EncuestasView(),
-      floatingActionButton: !isAdmin
+      floatingActionButton: isAdmin
           ? FloatingActionButton.extended(
               label: const Text('Nueva encuesta'),
               icon: const Icon(Icons.add),

@@ -1,23 +1,18 @@
-
-
-
-
+import 'package:app_encuentas_prueba_tecnica/features/auth/presentation/providers/providers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../encuestas/domain/domain.dart';
 
-class CustomCardEncuesta extends StatelessWidget {
+class CustomCardEncuesta extends ConsumerWidget {
   final Encuesta encuesta;
 
-  const CustomCardEncuesta({
-    super.key,
-    required this.encuesta,
-  });
-    
+  const CustomCardEncuesta({super.key, required this.encuesta});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final authUser = ref.watch(authProvider);
     return GestureDetector(
       onTap: () {
         context.push('/encuesta/${encuesta.id}');
@@ -54,7 +49,9 @@ class CustomCardEncuesta extends StatelessWidget {
                       radius: 28,
                       backgroundColor: Colors.blue.shade100,
                       child: Text(
-                        encuesta.titulo.isNotEmpty ? encuesta.titulo[0].toUpperCase() : '?',
+                        encuesta.titulo.isNotEmpty
+                            ? encuesta.titulo[0].toUpperCase()
+                            : '?',
                         style: const TextStyle(
                           fontSize: 28,
                           fontWeight: FontWeight.bold,
@@ -69,7 +66,8 @@ class CustomCardEncuesta extends StatelessWidget {
                         children: [
                           Text(
                             encuesta.titulo,
-                            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                            style: Theme.of(context).textTheme.titleMedium
+                                ?.copyWith(
                                   fontWeight: FontWeight.bold,
                                   color: Colors.blue.shade900,
                                   fontSize: 18,
@@ -80,7 +78,8 @@ class CustomCardEncuesta extends StatelessWidget {
                           const SizedBox(height: 6),
                           Text(
                             encuesta.descripcion,
-                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            style: Theme.of(context).textTheme.bodyMedium
+                                ?.copyWith(
                                   color: Colors.grey.shade800,
                                   fontSize: 15,
                                 ),
@@ -88,24 +87,34 @@ class CustomCardEncuesta extends StatelessWidget {
                             overflow: TextOverflow.ellipsis,
                           ),
                           const SizedBox(height: 10),
-                          Row(
-                            children: [
-                              Icon(
-                                encuesta.estado == 'Completada' ? Icons.check_circle : Icons.hourglass_empty,
-                                color: encuesta.estado == 'Completada' ? Colors.green : Colors.orange,
-                                size: 18,
-                              ),
-                              const SizedBox(width: 6),
-                              Text(
-                                encuesta.estado == 'Completada' ? 'Completada' : 'Pendiente',
-                                style: TextStyle(
-                                  color: encuesta.estado == 'Completada' ? Colors.green : Colors.orange,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 14,
+                          authUser.user!.isAdmin?
+                          SizedBox():
+                            Row(
+                              children: [
+                                Icon(
+                                  encuesta.estado == 'Completada'
+                                      ? Icons.check_circle
+                                      : Icons.hourglass_empty,
+                                  color: encuesta.estado == 'Completada'
+                                      ? Colors.green
+                                      : Colors.orange,
+                                  size: 18,
                                 ),
-                              ),
-                            ],
-                          ),
+                                const SizedBox(width: 6),
+                                Text(
+                                  encuesta.estado == 'Completada'
+                                      ? 'Completada'
+                                      : 'Pendiente',
+                                  style: TextStyle(
+                                    color: encuesta.estado == 'Completada'
+                                        ? Colors.green
+                                        : Colors.orange,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              ],
+                            ),
                         ],
                       ),
                     ),
@@ -117,11 +126,18 @@ class CustomCardEncuesta extends StatelessWidget {
                   children: [
                     Row(
                       children: [
-                        const Icon(Icons.calendar_today, size: 16, color: Colors.grey),
+                        const Icon(
+                          Icons.calendar_today,
+                          size: 16,
+                          color: Colors.grey,
+                        ),
                         const SizedBox(width: 4),
                         Text(
                           _formatFecha(encuesta.fechaCreacion),
-                          style: const TextStyle(color: Colors.grey, fontSize: 13),
+                          style: const TextStyle(
+                            color: Colors.grey,
+                            fontSize: 13,
+                          ),
                         ),
                       ],
                     ),
@@ -131,8 +147,15 @@ class CustomCardEncuesta extends StatelessWidget {
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                        child: Icon(Icons.arrow_forward_ios, size: 18, color: Colors.blue),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 4,
+                        ),
+                        child: Icon(
+                          Icons.arrow_forward_ios,
+                          size: 18,
+                          color: Colors.blue,
+                        ),
                       ),
                     ),
                   ],

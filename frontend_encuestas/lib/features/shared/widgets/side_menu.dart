@@ -40,7 +40,7 @@ class SideMenuState extends ConsumerState<SideMenu> {
       children: [
         Padding(
           padding: EdgeInsets.fromLTRB(20, hasNotch ? 0 : 20, 16, 0),
-          child: Text(!isAdmin ? 'Administrador' : 'Cliente', style: textStyles.titleMedium),
+          child: Text(isAdmin ? 'Administrador' : 'Cliente', style: textStyles.titleMedium),
         ),
 
         Padding(
