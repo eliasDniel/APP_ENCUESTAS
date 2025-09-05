@@ -75,27 +75,27 @@ El sistema está pensado para ser escalable y fácil de mantener.
 >
 > **Pantallas del administrador:**
 >
-> ![Resultados](imagenes/img3.png)
+> ![Resultados](screenshots/img3.png)
 >
 > **Pantallas del administrador:**
 >
-> ![Resultados](imagenes/img4.png)
+> ![Resultados](screenshots/img4.png)
 >
 > **Pantallas del administrador:**
 >
-> ![Notificación](imagenes/img4.png)
+> ![Notificación](screenshots/img4.png)
 >
 > **Pantallas del administrador:**
 >
-> ![Notificación](imagenes/img5.png)
+> ![Notificación](screenshots/img5.png)
 >
 > **Pantallas del Cliente:**
 >
-> ![Notificación](imagenes/img6.png)
+> ![Notificación](screenshots/img6.png)
 >
 > **Pantallas del administrador + Push Notifications:**
 >
-> ![Notificación](imagenes/img7.png)
+> ![Notificación](screenshots/img7.png)
 
 
 ## 5. Detalles sobre Notificaciones Push
