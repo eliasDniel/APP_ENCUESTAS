@@ -67,35 +67,35 @@ El sistema está pensado para ser escalable y fácil de mantener.
 
 > **Encuesta App:**
 >
-> ![Encuestas](img1.png)
+> ![Encuestas](imagenes/img1.png)
 >
 > **Autentificacion:**
 >
-> ![Responder](img2.png)
+> ![Responder](imagenes/img2.png)
 >
 > **Pantallas del administrador:**
 >
-> ![Resultados](img3.png)
+> ![Resultados](imagenes/img3.png)
 >
 > **Pantallas del administrador:**
 >
-> ![Resultados](img4.png)
+> ![Resultados](imagenes/img4.png)
 >
 > **Pantallas del administrador:**
 >
-> ![Notificación](img4.png)
+> ![Notificación](imagenes/img4.png)
 >
 > **Pantallas del administrador:**
 >
-> ![Notificación](img5.png)
+> ![Notificación](imagenes/img5.png)
 >
 > **Pantallas del Cliente:**
 >
-> ![Notificación](img6.png)
+> ![Notificación](imagenes/img6.png)
 >
 > **Pantallas del administrador + Push Notifications:**
 >
-> ![Notificación](img7.png)
+> ![Notificación](imagenes/img7.png)
 
 
 ## 5. Detalles sobre Notificaciones Push
