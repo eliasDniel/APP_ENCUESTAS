@@ -61,23 +61,38 @@ Esta aplicación permite la gestión y participación en encuestas de manera sen
 
 ## 4. Capturas de Pantalla
 
-> **Encuestas disponibles:**
+> **Encuesta App:**
 >
 > ![Encuestas](img1.png)
 >
-> **Responder encuesta:**
+> **Autentificacion:**
 >
 > ![Responder](img2.png)
 >
-> **Resultados de encuesta:**
+> **Pantallas del administrador:**
 >
 > ![Resultados](img3.png)
 >
-> **Notificación push recibida:**
+> **Pantallas del administrador:**
+>
+> ![Resultados](img4.png)
+>
+> **Pantallas del administrador:**
 >
 > ![Notificación](img4.png)
+>
+> **Pantallas del administrador:**
+>
+> ![Notificación](img5.png)
+>
+> **Pantallas del Cliente:**
+>
+> ![Notificación](img6.png)
+>
+> **Pantallas del administrador + Push Notifications:**
+>
+> ![Notificación](img7.png)
 
-*(Agrega más capturas según lo necesario, usando los archivos imgX.png)*
 
 ## 5. Detalles sobre Notificaciones Push
 
