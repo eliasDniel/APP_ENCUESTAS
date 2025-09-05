@@ -1,3 +1,4 @@
+import 'package:art_sweetalert/art_sweetalert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -23,11 +24,7 @@ class LoginScreen extends StatelessWidget {
               children: [
                 const SizedBox(height: 80),
                 // Icon Banner
-                const Icon(
-                  Icons.poll,
-                  color: Colors.white,
-                  size: 100,
-                ),
+                const Icon(Icons.poll, color: Colors.white, size: 100),
                 const SizedBox(height: 80),
 
                 Container(
@@ -54,13 +51,6 @@ class LoginScreen extends StatelessWidget {
 class _LoginForm extends ConsumerWidget {
   const _LoginForm();
 
-  void showSnackbar(BuildContext context, String message) {
-    ScaffoldMessenger.of(context).hideCurrentSnackBar();
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(SnackBar(content: Text(message)));
-  }
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final loginFormState = ref.watch(loginFormProvider);
@@ -68,9 +58,15 @@ class _LoginForm extends ConsumerWidget {
     final textStyles = Theme.of(context).textTheme;
     ref.listen(authProvider, (previous, next) {
       if (next.errorMessage.isEmpty) return;
-      showSnackbar(context, next.errorMessage);
+      ArtSweetAlert.show(
+        context: context,
+        artDialogArgs: ArtDialogArgs(
+          type: ArtSweetAlertType.danger,
+          title: "Error",
+          text: next.errorMessage,
+        ),
+      );
     });
-
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 50),
@@ -108,8 +104,8 @@ class _LoginForm extends ConsumerWidget {
               text: 'Ingresar',
               buttonColor: Colors.black,
               onPressed: loginFormState.isPosting
-                ? null
-                : ref.read(loginFormProvider.notifier).onSubmit,
+                  ? null
+                  : ref.read(loginFormProvider.notifier).onSubmit,
             ),
           ),
 

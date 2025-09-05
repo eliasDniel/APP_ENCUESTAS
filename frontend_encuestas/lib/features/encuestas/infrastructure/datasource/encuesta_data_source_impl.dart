@@ -54,6 +54,11 @@ class EncuestasDataSourceImpl implements EncuestasDatasource {
       if (e.response?.statusCode == 401) {
         throw CustomError(e.response?.data['message'] ?? 'Token inválido');
       }
+      if (e.response?.statusCode == 404) {
+        throw CustomError(
+          e.response?.data['detail'] ?? 'Encuesta no encontrada',
+        );
+      }
       throw Exception();
     } catch (e) {
       throw Exception();
@@ -88,7 +93,10 @@ class EncuestasDataSourceImpl implements EncuestasDatasource {
       return encuesta;
     } on DioError catch (e) {
       if (e.response?.statusCode == 401) {
-        throw CustomError(e.response?.data['detail'] ?? 'Error al Responder');
+        throw CustomError(e.response?.data['message'] ?? 'Error al Responder');
+      }
+      if (e.response?.statusCode == 404) {
+        throw CustomError(e.response?.data['detail'] ?? 'Encuesta no existe');
       }
       throw Exception();
     } catch (e) {

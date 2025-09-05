@@ -6,18 +6,16 @@ import '../../../auth/presentation/providers/providers.dart';
 import '../../../shared/shared.dart';
 import '../providers/encuesta_provider_state.dart';
 
-class EncuestaScreen extends ConsumerStatefulWidget {
+class EncuestaScreen extends ConsumerWidget {
   const EncuestaScreen({super.key});
 
   @override
-  EncuestaScreenState createState() => EncuestaScreenState();
-}
-
-class EncuestaScreenState extends ConsumerState<EncuestaScreen> {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final isAdmin = ref.watch(authProvider).user?.isAdmin ?? false;
     final scaffoldKey = GlobalKey<ScaffoldState>();
+
+    
+
 
     return Scaffold(
       drawer: SideMenu(scaffoldKey: scaffoldKey),
@@ -68,10 +66,6 @@ class _EncuestasViewState extends ConsumerState<_EncuestasView> {
   @override
   Widget build(BuildContext context) {
     final encuestas = ref.watch(encuestasProvider);
-    final isLoading = ref.watch(encuestasProvider.notifier).isLoading;
-    if (isLoading && encuestas.isEmpty) {
-      return const Center(child: CircularProgressIndicator());
-    }
     return encuestas.isNotEmpty
         ? ListView.builder(
             controller: scrollController,
@@ -87,7 +81,6 @@ class _EncuestasViewState extends ConsumerState<_EncuestasView> {
             children: [
               Image.asset('assets/images/no_encuestas.png'),
               const SizedBox(height: 16),
-
               widget.isAdmin
                   ? const Text(
                       'No hay encuestas disponibles.\nCrea una nueva encuesta',

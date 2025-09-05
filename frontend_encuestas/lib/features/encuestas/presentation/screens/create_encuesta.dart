@@ -15,8 +15,37 @@ class CreateEncuestaScreenState extends ConsumerState<CreateEncuestaScreen> {
   final _descripcionController = TextEditingController();
   List<PreguntaForm> preguntas = [PreguntaForm(key: UniqueKey())];
 
+    bool get _isFormValid {
+    if (_tituloController.text.trim().isEmpty) return false;
+    if (_descripcionController.text.trim().isEmpty) return false;
+    if (preguntas.isEmpty) return false;
+    for (final pregunta in preguntas) {
+      if (pregunta.textoController.text.trim().isEmpty) return false;
+      if (pregunta.tipo == 'opcion_multiple') {
+        if (pregunta.opcionesControllers.isEmpty) return false;
+        for (final op in pregunta.opcionesControllers) {
+          if (op.text.trim().isEmpty) return false;
+        }
+      }
+    }
+    return true;
+  }
+
+  void _onFormChanged() {
+    setState(() {});
+  }
+
   @override
+  void initState() {
+    super.initState();
+    _tituloController.addListener(_onFormChanged);
+    _descripcionController.addListener(_onFormChanged);
+  }
+
+   @override
   void dispose() {
+    _tituloController.removeListener(_onFormChanged);
+    _descripcionController.removeListener(_onFormChanged);
     _tituloController.dispose();
     _descripcionController.dispose();
     for (var p in preguntas) {
@@ -24,10 +53,12 @@ class CreateEncuestaScreenState extends ConsumerState<CreateEncuestaScreen> {
     }
     super.dispose();
   }
-
   void _addPregunta() {
     setState(() {
-      preguntas.add(PreguntaForm(key: UniqueKey()));
+      final pregunta = PreguntaForm(key: UniqueKey());
+      pregunta.textoController.addListener(_onFormChanged);
+      pregunta.addOpcionListener(_onFormChanged);
+      preguntas.add(pregunta);
     });
   }
 
@@ -52,7 +83,7 @@ class CreateEncuestaScreenState extends ConsumerState<CreateEncuestaScreen> {
       ),
 
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(24),
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -271,7 +302,7 @@ class CreateEncuestaScreenState extends ConsumerState<CreateEncuestaScreen> {
         ),
       ),
       bottomNavigationBar: Padding(
-        padding: const EdgeInsets.fromLTRB(15, 0, 15, 20),
+        padding: const EdgeInsets.fromLTRB(10, 0, 10, 20),
         child: SizedBox(
           width: double.infinity,
           child: Row(
@@ -298,14 +329,14 @@ class CreateEncuestaScreenState extends ConsumerState<CreateEncuestaScreen> {
                     ),
                     foregroundColor: const Color(0xFF388E3C),
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
+                      horizontal: 12,
                       vertical: 16,
                     ),
                   ),
                   onPressed: _addPregunta,
                 ),
               ),
-              SizedBox(width: 5),
+              SizedBox(width: 3),
               Expanded(
                 flex: 3,
                 child: ElevatedButton(
@@ -317,22 +348,24 @@ class CreateEncuestaScreenState extends ConsumerState<CreateEncuestaScreen> {
                     ),
                     elevation: 2,
                   ),
-                  onPressed: () {
-                    final body = {
-                      "titulo": _tituloController.text,
-                      "descripcion": _descripcionController.text,
-                      "preguntas": preguntas.map((p) => p.toMap()).toList(),
-                    };
-                    ref
-                        .read(encuestasProvider.notifier)
-                        .createEncuestaMethod(body);
-                    Navigator.of(context).pop();
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Encuesta generada. Revisa la consola.'),
-                      ),
-                    );
-                  },
+                  onPressed: _isFormValid
+                      ? () {
+                          final body = {
+                            "titulo": _tituloController.text,
+                            "descripcion": _descripcionController.text,
+                            "preguntas": preguntas.map((p) => p.toMap()).toList(),
+                          };
+                          ref
+                              .read(encuestasProvider.notifier)
+                              .createEncuestaMethod(body);
+                          Navigator.of(context).pop();
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Encuesta generada. Revisa la consola.'),
+                            ),
+                          );
+                        }
+                      : null,
                   child: const Text(
                     'Crear Encuesta',
                     style: TextStyle(
@@ -357,12 +390,26 @@ class PreguntaForm {
   String tipo = 'opcion_multiple';
   List<TextEditingController> opcionesControllers = [TextEditingController()];
   List<Key> opcionesKeys = [UniqueKey()];
+  final List<VoidCallback> _opcionListeners = [];
 
-  PreguntaForm({Key? key}) : key = key ?? UniqueKey();
+  PreguntaForm({Key? key}) : key = key ?? UniqueKey() {
+    textoController.addListener(() {});
+  }
 
   void addOpcion() {
-    opcionesControllers.add(TextEditingController());
+    final controller = TextEditingController();
+    opcionesControllers.add(controller);
     opcionesKeys.add(UniqueKey());
+    for (final listener in _opcionListeners) {
+      controller.addListener(listener);
+    }
+  }
+
+  void addOpcionListener(VoidCallback listener) {
+    _opcionListeners.add(listener);
+    for (final c in opcionesControllers) {
+      c.addListener(listener);
+    }
   }
 
   void removeOpcion(int idx) {

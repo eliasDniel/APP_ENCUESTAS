@@ -1,47 +1,37 @@
 # ETM-Orexe-Elias-Ramos - Proyecto Encuestas
 
-Este repositorio contiene el desarrollo completo de una aplicación de encuestas, abarcando tanto el backend (API REST con Django) como el frontend (aplicación Flutter). El objetivo es ofrecer una solución escalable y mantenible para la gestión y participación en encuestas.
+## 1. Descripción del Proyecto
 
-## Estructura del proyecto
+Esta aplicación permite la gestión y participación en encuestas de manera sencilla y multiplataforma. Incluye un backend desarrollado en Django (API REST) y un frontend en Flutter. Los usuarios pueden registrarse, autenticarse, responder encuestas y visualizar resultados en tiempo real. El sistema está pensado para ser escalable y fácil de mantener.
 
-```
-ETM-Orexe-Elias-Ramos/
-├── backend_prueba_tecnica/   # Backend: API REST en Django
-└── frontend_encuestas/       # Frontend: App Flutter multiplataforma
-```
-
-## Estado actual
-- **Backend:**
-  - Autenticación de usuarios (registro, login, token personalizado)
-  - Estructura modular y lista para expandirse (encuestas, respuestas, administración, etc.)
-- **Frontend:**
-  - Estructura inicial de proyecto Flutter creada
-  - Próximamente: integración con la API y desarrollo de interfaces de usuario
-
-## Tecnologías principales
-- **Backend:** Python, Django, Django REST Framework, Postgres
-- **Frontend:** Flutter, Dart
-
-## Instalación y ejecución
+## 2. Instrucciones de Ejecución
 
 ### Backend
+
 1. Navega a la carpeta del backend:
    ```bash
    cd backend_prueba_tecnica
    ```
-2. Instala dependencias y ejecuta migraciones:
+2. Instala las dependencias:
    ```bash
    pip install -r requirements.txt
+   ```
+3. Realiza las migraciones de la base de datos:
+   ```bash
    python manage.py migrate
+   ```
+4. Ejecuta el servidor en localhost:
+   ```bash
    python manage.py runserver
    ```
 
 ### Frontend
+
 1. Navega a la carpeta del frontend:
    ```bash
    cd frontend_encuestas
    ```
-2. Instala dependencias:
+2. Instala las dependencias:
    ```bash
    flutter pub get
    ```
@@ -50,17 +40,55 @@ ETM-Orexe-Elias-Ramos/
    flutter run
    ```
 
-## Expansión futura
-Este README está diseñado para ser escalable. A medida que el proyecto avance, se podrán agregar secciones como:
-- Documentación de endpoints y ejemplos de uso
-- Guía de despliegue en producción
-- Pruebas automatizadas (backend y frontend)
-- Contribuciones, licencias y autores
-- Integración continua y despliegue automatizado
+#### Configuración
 
-## Notas
-- El backend y el frontend están desacoplados, permitiendo desarrollos y despliegues independientes.
-- La comunicación entre ambos se realiza vía API REST.
+- Asegúrate de tener configurados los archivos `.env` tanto en backend como en frontend para las variables de entorno necesarias (por ejemplo, claves secretas, endpoints, configuración de Firebase, etc.).
+
+## 3. Decisiones Técnicas
+
+- **Tecnologías:**  
+  - Backend: Python, Django, Django REST Framework por su robustez y facilidad para crear APIs seguras y escalables.
+  - Frontend: Flutter, por su capacidad multiplataforma y rápido desarrollo de interfaces modernas.
+- **Base de datos:**  
+  - SQLite para desarrollo local por su simplicidad, con posibilidad de migrar a Postgres en producción.
+- **Gestión de roles:**  
+  - Uso de permisos y autenticación JWT en Django para separar usuarios administradores y usuarios normales.
+- **Arquitectura:**  
+  - Backend y frontend desacoplados, comunicación vía API REST.
+  - Uso de Riverpod y Bloc en Flutter para la gestión de estado y notificaciones.
+- **Notificaciones push:**  
+  - Integración con Firebase Cloud Messaging para envío y recepción de notificaciones en tiempo real.
+
+## 4. Capturas de Pantalla
+
+> **Encuestas disponibles:**
+>
+> ![Encuestas](img1.png)
+>
+> **Responder encuesta:**
+>
+> ![Responder](img2.png)
+>
+> **Resultados de encuesta:**
+>
+> ![Resultados](img3.png)
+>
+> **Notificación push recibida:**
+>
+> ![Notificación](img4.png)
+
+*(Agrega más capturas según lo necesario, usando los archivos imgX.png)*
+
+## 5. Detalles sobre Notificaciones Push
+
+- **Configuración:**  
+  - El frontend utiliza Firebase Cloud Messaging (FCM). La configuración de Firebase se encuentra en `frontend_encuestas/lib/firebase_options.dart` y los archivos de configuración (`google-services.json` para Android, `GoogleService-Info.plist` para iOS).
+  - El backend utiliza la función `send_push_notification_v1` para enviar notificaciones a los dispositivos registrados.
+
+- **Funcionamiento:**  
+  - Al iniciar sesión, la app solicita permisos y registra el token de dispositivo en el backend.
+  - Cuando se crea una nueva encuesta o hay un evento relevante, el backend envía una notificación push a los usuarios mediante FCM.
+  - El frontend muestra la notificación y puede navegar al detalle de la encuesta al pulsarla.
 
 ---
 

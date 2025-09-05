@@ -53,7 +53,10 @@ class EncuestasNotifier extends StateNotifier<List<Encuesta>> {
     if (isLoading) return;
     isLoading = true;
     final newEncuestas = await fetchEncuestas(page: page);
-    if (newEncuestas.isEmpty) return;
+    if (newEncuestas.isEmpty) {
+      isLoading = false;
+      return;
+    }
     page++;
     state = [...state, ...newEncuestas];
     isLoading = false;
@@ -66,20 +69,26 @@ class EncuestasNotifier extends StateNotifier<List<Encuesta>> {
   }
 
   Future<void> responderEncuestaMethod(Map<String, dynamic> data) async {
+    isLoading = true;
     final encuesta = await responderEncuesta(data);
     state = state.map((e) => e.id == encuesta.id ? encuesta : e).toList();
+    isLoading = false;
   }
 
   Future<void> createEncuestaMethod(Map<String, dynamic> data) async {
+    isLoading = true;
     final encuesta = await crearEncuesta(data);
     state = [encuesta, ...state];
+    isLoading = false;
   }
 
   Future<void> deleteEncuestaMethod(int id) async {
+    isLoading = true;
     final isDeleted = await encuestasRepository.deleteEncuesta(id);
     if (isDeleted) {
       state.removeWhere((e) => e.id == id);
       state = [...state];
     }
+    isLoading = false;
   }
 }
