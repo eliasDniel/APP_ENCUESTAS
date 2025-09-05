@@ -24,9 +24,9 @@ El sistema está pensado para ser escalable y fácil de mantener.
    ```bash
    python manage.py migrate
    ```
-4. Ejecuta el servidor en localhost:
+4. Ejecuta el servidor apuntando a la IP:
    ```bash
-   python manage.py runserver
+   python manage.py runserver 0.0.0.0:8000
    ```
 
 ### Frontend
