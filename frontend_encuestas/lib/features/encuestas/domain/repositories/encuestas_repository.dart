@@ -18,4 +18,8 @@ abstract class EncuestasRepository {
 
   // ! CONSULTAR RESULTADOS DE ENCUESTA POR ID
   Future<EncuestasResultDetail> getResultadosEncuestaById(int id);
+
+
+
+  Future<bool> deleteEncuesta(int id);
 }

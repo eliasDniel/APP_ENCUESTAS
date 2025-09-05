@@ -16,4 +16,9 @@ abstract class EncuestasDatasource {
 
   // ! CONSULTAR RESULTADOS DE ENCUESTA POR ID
   Future<EncuestasResultDetail> getResultadosEncuestaById(int id);
+
+
+  // ! ELIMINAR ENCUESTA
+  Future<bool> deleteEncuesta(int id);
+  
 }

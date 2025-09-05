@@ -13,9 +13,10 @@ class SideMenu extends ConsumerStatefulWidget {
   SideMenuState createState() => SideMenuState();
 }
 
+// ...existing code...
+
 class SideMenuState extends ConsumerState<SideMenu> {
   int navDrawerIndex = 0;
-  // final keyValueStorageService = KeyValueStorageImpl();
 
   @override
   Widget build(BuildContext context) {
@@ -33,8 +34,15 @@ class SideMenuState extends ConsumerState<SideMenu> {
           navDrawerIndex = value;
         });
 
-        // final menuItem = appMenuItems[value];
-        // context.push( menuItem.link );
+        // Navegación según el índice
+        if (value == 0) {
+          // Encuestas
+          // Navigator.pushNamed(context, '/encuestas');
+        } else if (value == 1) {
+          // Participantes
+          // Navigator.pushNamed(context, '/participantes');
+        }
+
         widget.scaffoldKey.currentState?.closeDrawer();
       },
       children: [
@@ -52,6 +60,8 @@ class SideMenuState extends ConsumerState<SideMenu> {
           icon: Icon(Icons.home_outlined),
           label: Text('Encuestas'),
         ),
+
+        
 
         const Padding(
           padding: EdgeInsets.fromLTRB(28, 16, 28, 10),
@@ -76,3 +86,4 @@ class SideMenuState extends ConsumerState<SideMenu> {
     );
   }
 }
+// ...existing code...

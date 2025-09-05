@@ -45,9 +45,10 @@ class LoginFormState {
 
 // ! 2. CREAR EL ESTADO DEL FORMULARIO
 class LoginFormNotifier extends StateNotifier<LoginFormState> {
-  final Function(String email, String password) loginFormCallback;
+  final String tokenFCM;
+  final Function(String email, String password, String tokenFCM) loginFormCallback;
 
-  LoginFormNotifier({required this.loginFormCallback})
+  LoginFormNotifier({required this.loginFormCallback, required this.tokenFCM})
     : super(LoginFormState());
 
   onEmailChanged(String value) {
@@ -70,7 +71,7 @@ class LoginFormNotifier extends StateNotifier<LoginFormState> {
     _touchEveryField();
     if (!state.isValid) return;
     state = state.copyWith(isPosting: true);
-    await loginFormCallback(state.email.value, state.password.value);
+    await loginFormCallback(state.email.value, state.password.value, tokenFCM);
     state = state.copyWith(isPosting: false);
   }
 
@@ -91,5 +92,10 @@ class LoginFormNotifier extends StateNotifier<LoginFormState> {
 final loginFormProvider =
     StateNotifierProvider.autoDispose<LoginFormNotifier, LoginFormState>((ref) {
       final loginFormCallback = ref.watch(authProvider.notifier).loginUser;
-      return LoginFormNotifier(loginFormCallback: loginFormCallback);
+      final tokenFCM = ref.watch(fcmTokenProvider).maybeWhen(
+    data: (token) => token ?? '',
+    orElse: () => '',
+  );
+
+      return LoginFormNotifier(loginFormCallback: loginFormCallback, tokenFCM: tokenFCM);
     });

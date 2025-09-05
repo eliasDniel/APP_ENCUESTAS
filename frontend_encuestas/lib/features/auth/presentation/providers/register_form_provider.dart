@@ -1,5 +1,6 @@
 // ! 1. DEFINIR EL ESTADO DEL FORMULARIO
 import 'package:app_encuentas_prueba_tecnica/features/shared/infrastructure/inputs/fullname.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:formz/formz.dart';
 import '../../../shared/infrastructure/infrastructure.dart';
@@ -54,9 +55,10 @@ class RegisterFormState {
 
 // ! 2. CREAR EL ESTADO DEL FORMULARIO
 class RegisterFormNotifier extends StateNotifier<RegisterFormState> {
-  final Function(String email, String password, String fullname) registerFormCallback;
+  final String tokenFCM;
+  final Function(String email, String password, String fullname, String tokenFCM) registerFormCallback;
 
-  RegisterFormNotifier({required this.registerFormCallback})
+  RegisterFormNotifier({required this.registerFormCallback, required this.tokenFCM})
     : super(RegisterFormState());
 
     onFullNameChanged(String value) {
@@ -94,7 +96,7 @@ class RegisterFormNotifier extends StateNotifier<RegisterFormState> {
   onSubmit() async {
     _touchEveryField();
     if (!state.isValid) return;
-    await registerFormCallback(state.email.value, state.password.value, state.fullName.value);
+    await registerFormCallback(state.email.value, state.password.value, state.fullName.value, tokenFCM);
   }
 
   _touchEveryField() {
@@ -109,10 +111,21 @@ class RegisterFormNotifier extends StateNotifier<RegisterFormState> {
   }
 }
 
+final fcmTokenProvider = FutureProvider<String?>((ref) async {
+  return await FirebaseMessaging.instance.getToken();
+});
+
 
 // ! 3. IMPLEMENTAR EL ESTADO PARA CONSUMIR EN EL FRONTEND
 final registerFormProvider =
     StateNotifierProvider.autoDispose<RegisterFormNotifier, RegisterFormState>((ref) {
-      final registerFormCallback = ref.watch(authProvider.notifier).registerUser;
-      return RegisterFormNotifier(registerFormCallback: registerFormCallback);
-    });
+  final registerFormCallback = ref.watch(authProvider.notifier).registerUser;
+  final tokenFCM = ref.watch(fcmTokenProvider).maybeWhen(
+    data: (token) => token ?? '',
+    orElse: () => '',
+  );
+  return RegisterFormNotifier(
+    registerFormCallback: registerFormCallback,
+    tokenFCM: tokenFCM,
+  );
+});

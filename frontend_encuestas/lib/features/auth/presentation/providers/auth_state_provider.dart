@@ -23,10 +23,10 @@ class AuthNotifier extends StateNotifier<AuthState> {
     checkAuthStatus();
   }
 
-  void loginUser(String email, String password) async {
+  void loginUser(String email, String password, String tokenFCM) async {
     await Future.delayed(const Duration(milliseconds: 500));
     try {
-      final user = await authRepository.login(email, password);
+      final user = await authRepository.login(email, password, tokenFCM);
       _setLoggedUser(user);
     } on CustomError catch (e) {
       logoutUser(e.message);
@@ -35,10 +35,10 @@ class AuthNotifier extends StateNotifier<AuthState> {
     }
   }
 
-  void registerUser(String email, String password, String fullname) async {
+  void registerUser(String email, String password, String fullname, String tokenFCM) async {
     await Future.delayed(const Duration(milliseconds: 500));
     try {
-      final user = await authRepository.register(email, password, fullname);
+      final user = await authRepository.register(email, password, fullname, tokenFCM);
       _setLoggedUser(user);
     } on CustomError catch (e) {
       logoutUser(e.message);

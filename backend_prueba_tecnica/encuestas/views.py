@@ -1,13 +1,18 @@
-from django.shortcuts import render
+
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+
+from .utils import send_push_notification_v1
 from .models import Encuesta
 from .serializers import EncuestaSerializer, EncuestaListSerializer, RespuestaClienteSerializer
 from .models import Pregunta, Opcion, Respuesta
 from rest_framework import status
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAdminUser
+from django.contrib.auth import get_user_model
+
+
 
 class ResponderEncuestaView(APIView):
     permission_classes = [IsAuthenticated]
@@ -70,6 +75,16 @@ class EncuestasView(APIView):
         serializer = EncuestaSerializer(data=data)
         if serializer.is_valid():
             encuesta = serializer.save(creada_por=request.user)
+            User = get_user_model()
+            clientes = User.objects.filter(is_staff=False)
+            for cliente in clientes:
+                if hasattr(cliente, 'device_token') and cliente.device_token:
+                    nombre = getattr(cliente, 'name', cliente.username)
+                    send_push_notification_v1(
+                        cliente.device_token,
+                        title="Nueva encuesta disponible",
+                        body=f"Hola {nombre}, tienes una nueva encuesta disponible. ¡Te invitamos cordialmente a participar y compartir tu opinión!"
+                    )
             serializer = EncuestaListSerializer([encuesta], many=True, context={'user': request.user})
             return Response(serializer.data[0], status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -132,3 +147,14 @@ class EncuestaResultadosAdminView(APIView):
             'resultados': resultados
         }, status=status.HTTP_200_OK)
 
+
+
+class EncuestaDeleteView(APIView):
+    permission_classes = [IsAuthenticated, IsAdminUser]
+
+    def delete(self, request, pk):
+        encuesta = get_object_or_404(Encuesta, pk=pk)
+        encuesta.delete()
+        return Response({
+            'status': 'success',
+            'message': 'Encuesta eliminada correctamente.'}, status=status.HTTP_204_NO_CONTENT)

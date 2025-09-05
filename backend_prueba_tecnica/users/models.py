@@ -32,9 +32,10 @@ class User(AbstractUser):
     name = models.CharField(max_length=255, null=True, blank=True)
     email = models.CharField(max_length=255, unique=True)
     password = models.CharField(max_length=255)
+    device_token = models.CharField(max_length=1000, null=True, blank=True)  # Campo opcional
     username = None
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
 
-    objects = UserManager()  # <-- Añade esta línea
+    objects = UserManager()

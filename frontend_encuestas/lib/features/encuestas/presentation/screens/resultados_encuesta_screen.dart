@@ -1,3 +1,4 @@
+import 'package:app_encuentas_prueba_tecnica/features/encuestas/presentation/providers/encuesta_provider_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -99,13 +100,13 @@ class ResultadosEncuestaScreenState
                       ),
                     ),
                     const SizedBox(height: 16),
-                          
+
                     // Opciones
                     ...pregunta.opciones.map((opcion) {
                       final porcentaje = totalRespuestas == 0
                           ? 0.0
                           : opcion.countRespuestasOption / totalRespuestas;
-                          
+
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -172,7 +173,7 @@ class ResultadosEncuestaScreenState
                         ],
                       );
                     }),
-                          
+
                     if (pregunta.countRespuestasAbiertas > 0) ...[
                       // Respuestas abiertas
                       const Divider(),
@@ -184,13 +185,13 @@ class ResultadosEncuestaScreenState
                               Icons.comment,
                               color: Colors.blueAccent,
                             ),
-                            title: Text(
+                            subtitle: Text(
                               respuesta.usuario,
                               style: const TextStyle(
-                                fontWeight: FontWeight.bold,
+                                fontWeight: FontWeight.w600,
                               ),
                             ),
-                            subtitle: Text(respuesta.respuestaTexto),
+                            title: Text(respuesta.respuestaTexto),
                           );
                         }).toList(),
                       ),
@@ -244,14 +245,12 @@ class ResultadosEncuestaScreenState
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.red,
                     ),
-                    onPressed: () {
-                      // Aquí eliminas en backend
+                    onPressed: () async {
                       Navigator.pop(context);
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text("Encuesta eliminada correctamente"),
-                        ),
-                      );
+                      Navigator.pop(context);
+                      await ref
+                          .read(encuestasProvider.notifier)
+                          .deleteEncuestaMethod(int.parse(widget.encuestaId));
                     },
                     child: const Text("Eliminar"),
                   ),

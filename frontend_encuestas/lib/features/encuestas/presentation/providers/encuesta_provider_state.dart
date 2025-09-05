@@ -15,10 +15,12 @@ final encuestasProvider =
       final crearEncuesta = ref
           .watch(encuestasRepositoryProvider)
           .submitEncuesta;
+      final encuestasRepository = ref.watch(encuestasRepositoryProvider);
       return EncuestasNotifier(
         fetchEncuestas: fetchEncuestas,
         responderEncuesta: responderEncuesta,
         crearEncuesta: crearEncuesta,
+        encuestasRepository: encuestasRepository,
       );
     });
 
@@ -32,11 +34,13 @@ class EncuestasNotifier extends StateNotifier<List<Encuesta>> {
   final EncuestasCallBck fetchEncuestas;
   final ResponderEncuestaCallBack responderEncuesta;
   final CreateEncuestaCallBack crearEncuesta;
+  final EncuestasRepository encuestasRepository;
 
   EncuestasNotifier({
     required this.fetchEncuestas,
     required this.responderEncuesta,
     required this.crearEncuesta,
+    required this.encuestasRepository,
   }) : super([]) {
     loadNextPage();
   }
@@ -68,6 +72,14 @@ class EncuestasNotifier extends StateNotifier<List<Encuesta>> {
 
   Future<void> createEncuestaMethod(Map<String, dynamic> data) async {
     final encuesta = await crearEncuesta(data);
-    state = [encuesta,...state];
+    state = [encuesta, ...state];
+  }
+
+  Future<void> deleteEncuestaMethod(int id) async {
+    final isDeleted = await encuestasRepository.deleteEncuesta(id);
+    if (isDeleted) {
+      state.removeWhere((e) => e.id == id);
+      state = [...state];
+    }
   }
 }

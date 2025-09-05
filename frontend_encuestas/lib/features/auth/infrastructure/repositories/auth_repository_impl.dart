@@ -16,13 +16,13 @@ class AuthRepositoryImpl implements AuthRepository {
   ) : dataSources = dataSources ?? AuthDatasourceImpl();
 
   @override
-  Future<User> login(String email, String password) {
-    return dataSources.login(email, password);
+  Future<User> login(String email, String password, String tokenFCM) {
+    return dataSources.login(email, password, tokenFCM);
   }
 
   @override
-  Future<User> register(String email, String password, String fullname) {
-    return dataSources.register(email, password, fullname);
+  Future<User> register(String email, String password, String fullname, String tokenFCM) {
+    return dataSources.register(email, password, fullname, tokenFCM);
   }
 
   @override

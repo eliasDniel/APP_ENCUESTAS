@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:app_encuentas_prueba_tecnica/features/encuestas/presentation/providers/encuesta_provider_state.dart';
@@ -47,13 +46,9 @@ class CreateEncuestaScreenState extends ConsumerState<CreateEncuestaScreen> {
         centerTitle: true,
         title: Text(
           'Crear Encuesta',
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 22,
-          ),
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
         ),
         elevation: 0,
-      
       ),
 
       body: SingleChildScrollView(
@@ -61,16 +56,29 @@ class CreateEncuestaScreenState extends ConsumerState<CreateEncuestaScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Center(
+              child: Image.asset(
+                'assets/images/create.png',
+                height: 250,
+                fit: BoxFit.cover,
+              ),
+            ),
+            SizedBox(height: 16),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 TextField(
                   controller: _tituloController,
-                  style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 18,
+                  ),
                   decoration: InputDecoration(
                     labelText: 'Título',
                     labelStyle: TextStyle(color: Colors.grey[700]),
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                     filled: true,
                     fillColor: Colors.white,
                   ),
@@ -83,7 +91,9 @@ class CreateEncuestaScreenState extends ConsumerState<CreateEncuestaScreen> {
                   decoration: InputDecoration(
                     labelText: 'Descripción',
                     labelStyle: TextStyle(color: Colors.grey[700]),
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                     filled: true,
                     fillColor: Colors.white,
                   ),
@@ -91,7 +101,14 @@ class CreateEncuestaScreenState extends ConsumerState<CreateEncuestaScreen> {
               ],
             ),
             const SizedBox(height: 28),
-            Text('Preguntas', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Color(0xFF2D3A4A))),
+            Text(
+              'Preguntas',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
+                color: Color(0xFF2D3A4A),
+              ),
+            ),
             const SizedBox(height: 10),
             ListView.builder(
               shrinkWrap: true,
@@ -111,7 +128,9 @@ class CreateEncuestaScreenState extends ConsumerState<CreateEncuestaScreen> {
                             decoration: InputDecoration(
                               labelText: 'Texto de la pregunta',
                               labelStyle: TextStyle(color: Colors.grey[700]),
-                              border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
                               filled: true,
                               fillColor: Colors.grey[50],
                             ),
@@ -121,8 +140,13 @@ class CreateEncuestaScreenState extends ConsumerState<CreateEncuestaScreen> {
                         Tooltip(
                           message: 'Eliminar pregunta',
                           child: IconButton(
-                            icon: const Icon(Icons.delete_outline, color: Color(0xFFD32F2F)),
-                            onPressed: preguntas.length > 1 ? () => _removePregunta(idx) : null,
+                            icon: const Icon(
+                              Icons.delete_outline,
+                              color: Color(0xFFD32F2F),
+                            ),
+                            onPressed: preguntas.length > 1
+                                ? () => _removePregunta(idx)
+                                : null,
                           ),
                         ),
                       ],
@@ -132,13 +156,27 @@ class CreateEncuestaScreenState extends ConsumerState<CreateEncuestaScreen> {
                       value: pregunta.tipo,
                       decoration: InputDecoration(
                         labelText: 'Tipo de pregunta',
-                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
                         filled: true,
                         fillColor: Colors.grey[50],
                       ),
                       items: [
-                        DropdownMenuItem(value: 'opcion_multiple', child: Text('Opción múltiple', style: textStyle.bodyLarge)),
-                        DropdownMenuItem(value: 'opcion_libre', child: Text('Opción libre', style: textStyle.bodyLarge)),
+                        DropdownMenuItem(
+                          value: 'opcion_multiple',
+                          child: Text(
+                            'Opción múltiple',
+                            style: textStyle.bodyLarge,
+                          ),
+                        ),
+                        DropdownMenuItem(
+                          value: 'opcion_libre',
+                          child: Text(
+                            'Opción libre',
+                            style: textStyle.bodyLarge,
+                          ),
+                        ),
                       ],
                       onChanged: (val) {
                         setState(() {
@@ -160,11 +198,16 @@ class CreateEncuestaScreenState extends ConsumerState<CreateEncuestaScreen> {
                               children: [
                                 Expanded(
                                   child: TextField(
-                                    controller: pregunta.opcionesControllers[opIdx],
-                                    style: const TextStyle(fontWeight: FontWeight.w400),
+                                    controller:
+                                        pregunta.opcionesControllers[opIdx],
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.w400,
+                                    ),
                                     decoration: InputDecoration(
                                       labelText: 'Opción ${opIdx + 1}',
-                                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
                                       filled: true,
                                       fillColor: Colors.white,
                                     ),
@@ -174,8 +217,12 @@ class CreateEncuestaScreenState extends ConsumerState<CreateEncuestaScreen> {
                                 Tooltip(
                                   message: 'Eliminar opción',
                                   child: IconButton(
-                                    icon: const Icon(Icons.remove_circle_outline, color: Color(0xFFD32F2F)),
-                                    onPressed: pregunta.opcionesControllers.length > 1
+                                    icon: const Icon(
+                                      Icons.remove_circle_outline,
+                                      color: Color(0xFFD32F2F),
+                                    ),
+                                    onPressed:
+                                        pregunta.opcionesControllers.length > 1
                                         ? () {
                                             setState(() {
                                               pregunta.removeOpcion(opIdx);
@@ -192,8 +239,17 @@ class CreateEncuestaScreenState extends ConsumerState<CreateEncuestaScreen> {
                       Align(
                         alignment: Alignment.centerLeft,
                         child: TextButton.icon(
-                          icon: const Icon(Icons.add_circle_outline, color: Color(0xFF1976D2)),
-                          label: const Text('Agregar opción', style: TextStyle(color: Color(0xFF1976D2), fontWeight: FontWeight.w600)),
+                          icon: const Icon(
+                            Icons.add_circle_outline,
+                            color: Color(0xFF1976D2),
+                          ),
+                          label: const Text(
+                            'Agregar opción',
+                            style: TextStyle(
+                              color: Color(0xFF1976D2),
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
                           style: TextButton.styleFrom(
                             foregroundColor: const Color(0xFF1976D2),
                           ),
@@ -209,47 +265,86 @@ class CreateEncuestaScreenState extends ConsumerState<CreateEncuestaScreen> {
                 );
               },
             ),
-            const SizedBox(height: 16),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: OutlinedButton.icon(
-                icon: const Icon(Icons.add, color: Color(0xFF388E3C)),
-                label: const Text('Agregar pregunta', style: TextStyle(fontWeight: FontWeight.w600, color: Color(0xFF388E3C))),
-                style: OutlinedButton.styleFrom(
-                  side: const BorderSide(color: Color(0xFF388E3C), width: 1.5),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                  foregroundColor: const Color(0xFF388E3C),
-                  padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
-                ),
-                onPressed: _addPregunta,
-              ),
-            ),
+
             const SizedBox(height: 32),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF1976D2),
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                  elevation: 2,
-                ),
-                onPressed: () {
-                  final body = {
-                    "titulo": _tituloController.text,
-                    "descripcion": _descripcionController.text,
-                    "preguntas": preguntas.map((p) => p.toMap()).toList(),
-                  };
-                  ref.read(encuestasProvider.notifier).createEncuestaMethod(body);
-                  Navigator.of(context).pop();
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Encuesta generada. Revisa la consola.')),
-                  );
-                },
-                child: const Text('Crear Encuesta', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Colors.white)),
-              ),
-            ),
           ],
+        ),
+      ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.fromLTRB(15, 0, 15, 20),
+        child: SizedBox(
+          width: double.infinity,
+          child: Row(
+            children: [
+              Expanded(
+                flex: 2,
+                child: OutlinedButton.icon(
+                  icon: const Icon(Icons.add, color: Color(0xFF388E3C)),
+                  label: const Text(
+                    'Pregunta',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 18,
+                      color: Color(0xFF388E3C),
+                    ),
+                  ),
+                  style: OutlinedButton.styleFrom(
+                    side: const BorderSide(
+                      color: Color(0xFF388E3C),
+                      width: 1.5,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    foregroundColor: const Color(0xFF388E3C),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 16,
+                    ),
+                  ),
+                  onPressed: _addPregunta,
+                ),
+              ),
+              SizedBox(width: 5),
+              Expanded(
+                flex: 3,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF1976D2),
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    elevation: 2,
+                  ),
+                  onPressed: () {
+                    final body = {
+                      "titulo": _tituloController.text,
+                      "descripcion": _descripcionController.text,
+                      "preguntas": preguntas.map((p) => p.toMap()).toList(),
+                    };
+                    ref
+                        .read(encuestasProvider.notifier)
+                        .createEncuestaMethod(body);
+                    Navigator.of(context).pop();
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Encuesta generada. Revisa la consola.'),
+                      ),
+                    );
+                  },
+                  child: const Text(
+                    'Crear Encuesta',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

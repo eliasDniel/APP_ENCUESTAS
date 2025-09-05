@@ -7,11 +7,11 @@ class AuthDatasourceImpl extends AuthDatasource {
   final dio = Dio(BaseOptions(baseUrl: Enviroment.apiUrl));
 
   @override
-  Future<User> login(String email, String password) async {
+  Future<User> login(String email, String password, String tokenFCM) async {
     try {
       final response = await dio.post(
         '/auth/login',
-        data: {'email': email, 'password': password},
+        data: {'email': email, 'password': password, 'device_token': tokenFCM},
       );
       final loginResponse = LoginResponse.fromJson(response.data);
       final user = UserMapper.userJsonToEntity(loginResponse);
@@ -32,11 +32,11 @@ class AuthDatasourceImpl extends AuthDatasource {
   }
 
   @override
-  Future<User> register(String email, String password, String fullname) async {
+  Future<User> register(String email, String password, String fullname, String  tokenFCM) async {
     try {
       final response = await dio.post(
         '/auth/register',
-        data: {'email': email, 'password': password, 'name': fullname},
+        data: {'email': email, 'password': password, 'name': fullname, 'device_token': tokenFCM},
       );
       final loginResponse = LoginResponse.fromJson(response.data);
       final user = UserMapper.userJsonToEntity(loginResponse);

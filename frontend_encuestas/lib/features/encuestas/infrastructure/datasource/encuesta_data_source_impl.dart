@@ -22,7 +22,10 @@ class EncuestasDataSourceImpl implements EncuestasDatasource {
   @override
   Future<List<Encuesta>> getNowEncuestas({int page = 1}) async {
     try {
-      final response = await dio.get('/encuestas/encuestas/', queryParameters: {'page': page});
+      final response = await dio.get(
+        '/encuestas/encuestas/',
+        queryParameters: {'page': page},
+      );
       final encuestasResponse = EncuestasResponse.fromJson(response.data);
       final encuestas = encuestasResponse.results
           .map((e) => EncuestasMapper.fromJsonToEntity(e))
@@ -43,7 +46,9 @@ class EncuestasDataSourceImpl implements EncuestasDatasource {
     try {
       final response = await dio.get('/encuestas/encuestas/$id');
       final encuestaResponse = EncuestaDetalleResponse.fromJson(response.data);
-      final encuesta = EncuestasMapper.fromJsonToEntityDetails(encuestaResponse);
+      final encuesta = EncuestasMapper.fromJsonToEntityDetails(
+        encuestaResponse,
+      );
       return encuesta;
     } on DioError catch (e) {
       if (e.response?.statusCode == 401) {
@@ -54,11 +59,10 @@ class EncuestasDataSourceImpl implements EncuestasDatasource {
       throw Exception();
     }
   }
-  
+
   @override
   Future<Encuesta> submitEncuesta(Map<String, dynamic> body) async {
     try {
-      
       final response = await dio.post('/encuestas/encuestas/', data: body);
       final encuestaResponse = EncuestaResult.fromJson(response.data);
       return EncuestasMapper.fromJsonToEntity(encuestaResponse);
@@ -71,11 +75,14 @@ class EncuestasDataSourceImpl implements EncuestasDatasource {
       throw Exception();
     }
   }
-  
+
   @override
   Future<Encuesta> responderEncuesta(Map<String, dynamic> body) async {
     try {
-      final response = await dio.post('/encuestas/encuestas/responder/', data: body);
+      final response = await dio.post(
+        '/encuestas/encuestas/responder/',
+        data: body,
+      );
       final encuestaResponse = EncuestaResult.fromJson(response.data);
       final encuesta = EncuestasMapper.fromJsonToEntity(encuestaResponse);
       return encuesta;
@@ -93,12 +100,35 @@ class EncuestasDataSourceImpl implements EncuestasDatasource {
   Future<EncuestasResultDetail> getResultadosEncuestaById(int id) async {
     try {
       final response = await dio.get('/encuestas/encuestas/$id/resultados/');
-      final resultResponse = ResultadosEncuestasResponse.fromJson(response.data);
-      final resultados = EncuestasMapper.fromJsonToEntityResultados(resultResponse);
+      final resultResponse = ResultadosEncuestasResponse.fromJson(
+        response.data,
+      );
+      final resultados = EncuestasMapper.fromJsonToEntityResultados(
+        resultResponse,
+      );
       return resultados;
     } on DioError catch (e) {
       if (e.response?.statusCode == 401) {
         throw CustomError(e.response?.data['detail'] ?? 'Token inválido');
+      }
+      throw Exception();
+    } catch (e) {
+      throw Exception();
+    }
+  }
+
+  @override
+  Future<bool> deleteEncuesta(int id) async {
+    try {
+      await dio.delete('/encuestas/encuestas/$id/eliminar/');
+      return true;
+    } on DioError catch (e) {
+      if (e.response?.statusCode == 401) {
+        throw CustomError(e.response?.data['message'] ?? 'Error al Eliminar');
+      }
+
+      if (e.response?.statusCode == 404) {
+        throw CustomError(e.response?.data['detail'] ?? 'Encuesta no existe');
       }
       throw Exception();
     } catch (e) {

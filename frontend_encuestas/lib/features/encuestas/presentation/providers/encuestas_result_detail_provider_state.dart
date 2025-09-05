@@ -12,7 +12,7 @@ import 'encuestas_provider.dart';
 
 
 final encuestasResultDetailProvider =
-    StateNotifierProvider<EncuestasResultInfoNotifier, Map<String, EncuestasResultDetail>>((
+    StateNotifierProvider.autoDispose<EncuestasResultInfoNotifier, Map<String, EncuestasResultDetail>>((
       ref,
     ) {
       final getResultadosEncuesta = ref

@@ -22,12 +22,13 @@ class EncuestaScreenState extends ConsumerState<EncuestaScreen> {
     return Scaffold(
       drawer: SideMenu(scaffoldKey: scaffoldKey),
       appBar: AppBar(
+        centerTitle: true,
         title: const Text('Encuestas'),
         actions: [
           IconButton(onPressed: () {}, icon: const Icon(Icons.search_rounded)),
         ],
       ),
-      body: const _EncuestasView(),
+      body: _EncuestasView(isAdmin: isAdmin),
       floatingActionButton: isAdmin
           ? FloatingActionButton.extended(
               label: const Text('Nueva encuesta'),
@@ -42,39 +43,70 @@ class EncuestaScreenState extends ConsumerState<EncuestaScreen> {
 }
 
 class _EncuestasView extends ConsumerStatefulWidget {
-  const _EncuestasView();
+  final bool isAdmin;
+  const _EncuestasView({required this.isAdmin});
 
   @override
   _EncuestasViewState createState() => _EncuestasViewState();
 }
 
 class _EncuestasViewState extends ConsumerState<_EncuestasView> {
-  
   final ScrollController scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
-    
+
     scrollController.addListener(() {
-      if ( (scrollController.position.pixels + 400) >= scrollController.position.maxScrollExtent ) {
+      if ((scrollController.position.pixels + 400) >=
+          scrollController.position.maxScrollExtent) {
         ref.read(encuestasProvider.notifier).loadNextPage();
       }
     });
-
   }
+
   @override
   Widget build(BuildContext context) {
     final encuestas = ref.watch(encuestasProvider);
-    return ListView.builder(
-      controller: scrollController,
-      itemCount: encuestas.length,
-      itemBuilder: (context, index) {
-        final encuesta = encuestas[index];
-        return CustomCardEncuesta(
-          encuesta: encuesta,
-        );
-      },
-    );
+    final isLoading = ref.watch(encuestasProvider.notifier).isLoading;
+    if (isLoading && encuestas.isEmpty) {
+      return const Center(child: CircularProgressIndicator());
+    }
+    return encuestas.isNotEmpty
+        ? ListView.builder(
+            controller: scrollController,
+            itemCount: encuestas.length,
+            itemBuilder: (context, index) {
+              final encuesta = encuestas[index];
+              return CustomCardEncuesta(encuesta: encuesta);
+            },
+          )
+        : Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Image.asset('assets/images/no_encuestas.png'),
+              const SizedBox(height: 16),
+
+              widget.isAdmin
+                  ? const Text(
+                      'No hay encuestas disponibles.\nCrea una nueva encuesta',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    )
+                  : const Text(
+                      'No hay encuestas disponibles.',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+              const SizedBox(height: 200),
+            ],
+          );
   }
 }
