@@ -67,11 +67,11 @@ El sistema está pensado para ser escalable y fácil de mantener.
 
 > **Encuesta App:**
 >
-> ![Encuestas](imagenes/img1.png)
+> ![Encuestas](screenshots/img1.png)
 >
 > **Autentificacion:**
 >
-> ![Responder](imagenes/img2.png)
+> ![Responder](screenshots/img2.png)
 >
 > **Pantallas del administrador:**
 >
