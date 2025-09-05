@@ -6,7 +6,7 @@
 
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../domain/entities/encuestas_result.dart';
+import '../../domain/domain.dart';
 import 'encuestas_provider.dart';
 
 

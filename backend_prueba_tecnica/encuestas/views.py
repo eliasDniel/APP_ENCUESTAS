@@ -2,7 +2,6 @@
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-
 from .utils import send_push_notification_v1
 from .models import Encuesta
 from .serializers import EncuestaSerializer, EncuestaListSerializer, RespuestaClienteSerializer
@@ -11,8 +10,6 @@ from rest_framework import status
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAdminUser
 from django.contrib.auth import get_user_model
-
-
 
 class ResponderEncuestaView(APIView):
     permission_classes = [IsAuthenticated]
@@ -48,6 +45,7 @@ class EncuestaDetailView(APIView):
         encuesta = get_object_or_404(Encuesta, pk=pk)
         serializer = EncuestaSerializer(encuesta, context={'user': request.user})
         return Response(serializer.data, status=status.HTTP_200_OK)
+    
 
 class EncuestasView(APIView):
     permission_classes = [IsAuthenticated]
@@ -151,7 +149,6 @@ class EncuestaResultadosAdminView(APIView):
 
 class EncuestaDeleteView(APIView):
     permission_classes = [IsAuthenticated, IsAdminUser]
-
     def delete(self, request, pk):
         encuesta = get_object_or_404(Encuesta, pk=pk)
         encuesta.delete()

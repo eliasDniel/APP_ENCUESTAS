@@ -1,9 +1,9 @@
-import 'package:app_encuentas_prueba_tecnica/features/encuestas/presentation/providers/encuesta_provider_state.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../domain/domain.dart';
+import '../providers/providers.dart';
 
-import '../../domain/entities/encuestas_result.dart';
-import '../providers/encuestas_result_detail_provider_state.dart';
 
 class ResultadosEncuestaScreen extends ConsumerStatefulWidget {
   static const routeName = 'resultados-encuesta';

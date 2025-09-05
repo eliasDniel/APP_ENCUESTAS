@@ -1,6 +1,6 @@
 
 import '../domain.dart';
-import '../entities/encuestas_result.dart';
+
 
 /// ! LOGICA DE NEGOCIO
 abstract class EncuestasDatasource {

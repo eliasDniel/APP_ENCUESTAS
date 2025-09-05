@@ -1,9 +1,7 @@
 
 import '../../domain/domain.dart';
-import '../../domain/entities/encuestas_result.dart';
-import '../models/encuesta_detalle_response.dart';
-import '../models/encuestas_response.dart';
-import '../models/encuestas_result_response.dart';
+import '../infrastructure.dart';
+
 
 class EncuestasMapper {
   static Encuesta fromJsonToEntity(EncuestaResult json) => Encuesta(

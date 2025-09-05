@@ -1,8 +1,7 @@
-// * PROVIDER PARA TRAER UNA SOLA ENCUESTA Y GUARDAR EN CACHE
-import 'package:app_encuentas_prueba_tecnica/features/encuestas/presentation/providers/encuestas_provider.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../domain/domain.dart';
+import 'providers.dart';
 
 final encuestaInfoProvider =
     StateNotifierProvider.autoDispose<EncuestaInfoNotifier, Map<String, DetalleEncuesta>>((

@@ -1,9 +1,9 @@
-import 'package:app_encuentas_prueba_tecnica/features/encuestas/presentation/providers/encuesta_info_provider.dart';
-import 'package:app_encuentas_prueba_tecnica/features/encuestas/presentation/providers/encuesta_form_provider.dart';
+
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../domain/domain.dart';
-import '../providers/encuesta_provider_state.dart';
+import '../providers/providers.dart';
 
 class DetalleEncuestaScreen extends ConsumerStatefulWidget {
   static const String routeName = 'encuesta-screen';

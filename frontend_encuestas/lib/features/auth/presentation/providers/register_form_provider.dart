@@ -1,5 +1,4 @@
 // ! 1. DEFINIR EL ESTADO DEL FORMULARIO
-import 'package:app_encuentas_prueba_tecnica/features/shared/infrastructure/inputs/fullname.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:formz/formz.dart';

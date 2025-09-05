@@ -1,10 +1,9 @@
-import 'package:app_encuentas_prueba_tecnica/features/shared/widgets/custom_card_encuesta.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../auth/presentation/providers/providers.dart';
-import '../../../shared/shared.dart';
-import '../providers/encuesta_provider_state.dart';
+import '../../../shared/widgets/widgets.dart';
+import '../providers/providers.dart';
 
 class EncuestaScreen extends ConsumerWidget {
   const EncuestaScreen({super.key});
@@ -13,9 +12,6 @@ class EncuestaScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final isAdmin = ref.watch(authProvider).user?.isAdmin ?? false;
     final scaffoldKey = GlobalKey<ScaffoldState>();
-
-    
-
 
     return Scaffold(
       drawer: SideMenu(scaffoldKey: scaffoldKey),

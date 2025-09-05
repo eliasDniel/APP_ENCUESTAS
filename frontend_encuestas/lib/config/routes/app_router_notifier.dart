@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../features/auth/presentation/providers/providers.dart';
@@ -13,11 +11,8 @@ final goRouterNotifierProvider = Provider((ref) {
 
 
 class GoRouterNotifier extends ChangeNotifier {
-
   final AuthNotifier _authNotifier;
-
   AuthStatus _authStatus = AuthStatus.checking;
-
   GoRouterNotifier(this._authNotifier) {
     _authNotifier.addListener((state) {
       authStatus = state.authStatus;
@@ -26,7 +21,6 @@ class GoRouterNotifier extends ChangeNotifier {
 
 
   AuthStatus get authStatus => _authStatus;
-
   set authStatus( AuthStatus value ) {
     _authStatus = value;
     notifyListeners();

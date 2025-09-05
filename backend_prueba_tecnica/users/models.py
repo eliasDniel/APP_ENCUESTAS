@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-
 from django.contrib.auth.models import BaseUserManager
 
 class UserManager(BaseUserManager):
@@ -19,7 +18,6 @@ class UserManager(BaseUserManager):
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
         extra_fields.setdefault('is_active', True)
-
         if extra_fields.get('is_staff') is not True:
             raise ValueError('Superuser must have is_staff=True.')
         if extra_fields.get('is_superuser') is not True:
@@ -34,7 +32,7 @@ class User(AbstractUser):
     password = models.CharField(max_length=255)
     device_token = models.CharField(max_length=1000, null=True, blank=True)  # Campo opcional
     username = None
-
+    
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
 

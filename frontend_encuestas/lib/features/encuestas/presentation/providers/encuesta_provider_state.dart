@@ -1,7 +1,8 @@
 // ! 2: STATENOTIFIER
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../domain/domain.dart';
-import 'encuestas_provider.dart';
+import 'providers.dart';
+
 
 // ! 1: STATENOTIFIERPROVIDE: AQUI ES DONDE VOY A USARLO EN EL FRONTEND
 final encuestasProvider =

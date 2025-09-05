@@ -1,4 +1,4 @@
-import 'package:app_encuentas_prueba_tecnica/features/encuestas/domain/entities/encuestas_result.dart';
+
 import '../../domain/domain.dart';
 
 class EncuestaRepositoryImpl implements EncuestasRepository {

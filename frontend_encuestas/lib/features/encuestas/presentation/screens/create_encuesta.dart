@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:app_encuentas_prueba_tecnica/features/encuestas/presentation/providers/encuesta_provider_state.dart';
+import '../providers/providers.dart';
+
 
 class CreateEncuestaScreen extends ConsumerStatefulWidget {
   static const String routeName = 'create-encuesta';
