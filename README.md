@@ -2,7 +2,11 @@
 
 ## 1. Descripción del Proyecto
 
-Esta aplicación permite la gestión y participación en encuestas de manera sencilla y multiplataforma. Incluye un backend desarrollado en Django (API REST) y un frontend en Flutter. Los usuarios pueden registrarse, autenticarse, responder encuestas y visualizar resultados en tiempo real. El sistema está pensado para ser escalable y fácil de mantener.
+Esta aplicación permite la gestión y participación en encuestas de manera sencilla y multiplataforma. Incluye un backend desarrollado en Django (API REST) y un frontend en Flutter.  
+**Roles principales:**  
+● **Cliente:** Puede ver y responder encuestas.  
+● **Administrador:** Puede ver todas las encuestas y respuestas, además de crear nuevas encuestas.  
+El sistema está pensado para ser escalable y fácil de mantener.
 
 ## 2. Instrucciones de Ejecución
 
@@ -50,7 +54,7 @@ Esta aplicación permite la gestión y participación en encuestas de manera sen
   - Backend: Python, Django, Django REST Framework por su robustez y facilidad para crear APIs seguras y escalables.
   - Frontend: Flutter, por su capacidad multiplataforma y rápido desarrollo de interfaces modernas.
 - **Base de datos:**  
-  - SQLite para desarrollo local por su simplicidad, con posibilidad de migrar a Postgres en producción.
+  - PostgreSQL como base de datos principal, por su robustez y escalabilidad tanto en desarrollo como en producción.
 - **Gestión de roles:**  
   - Uso de permisos y autenticación JWT en Django para separar usuarios administradores y usuarios normales.
 - **Arquitectura:**  
@@ -103,7 +107,7 @@ Esta aplicación permite la gestión y participación en encuestas de manera sen
 - **Funcionamiento:**  
   - Al iniciar sesión, la app solicita permisos y registra el token de dispositivo en el backend.
   - Cuando se crea una nueva encuesta o hay un evento relevante, el backend envía una notificación push a los usuarios mediante FCM.
-  - El frontend muestra la notificación y puede navegar al detalle de la encuesta al pulsarla.
+  - Al pulsar la notificación push, la app navega directamente a la lista de encuestas para que el usuario pueda responder de inmediato.
 
 ---
 
